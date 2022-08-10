@@ -3,7 +3,7 @@
     private PlayersData playersInfo;
 
     private GameConstants gameConstants = new();
-    
+
     private char[,] gameFieldSymbols;
 
     private int playersCount;
@@ -18,9 +18,9 @@
 
     public TicTacToeGame(int playersCount = 2)
     {
-        this.playersCount = playersCount;   
+        this.playersCount = playersCount;
         playersInfo = new(playersCount);
-        gameFieldSymbols = new char[gameConstants.GameFieldSize, gameConstants.GameFieldSize];  
+        gameFieldSymbols = new char[gameConstants.GameFieldSize, gameConstants.GameFieldSize];
         for (int i = 0; i < gameConstants.GameFieldSize; i++)
             for (int j = 0; j < gameConstants.GameFieldSize; j++)
                 gameFieldSymbols[i, j] = '.';
@@ -104,7 +104,7 @@
     {
         string[] properValues = new string[gameConstants.GameFieldSize];
         for (int i = 0; i < gameConstants.GameFieldSize; i++)
-            properValues[i] = (i+1).ToString();
+            properValues[i] = (i + 1).ToString();
         input = input.Trim();
         int firstSpaceIndex = input.IndexOf(' ');
         if (firstSpaceIndex < 0)

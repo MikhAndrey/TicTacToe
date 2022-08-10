@@ -5,7 +5,7 @@
         TicTacToeGame myGame = new();
         myGame.LaunchGame();
         myGame.ConfirmGameRepeat();
-    }    
+    }
 }
 
 PlayTicTacToe();

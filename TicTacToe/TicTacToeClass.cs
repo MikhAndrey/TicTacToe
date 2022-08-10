@@ -1,10 +1,12 @@
 ﻿public class TicTacToeGame
 {
-    private char[,] gameFieldSymbols = new char[3, 3];
+    private PlayersData playersInfo;
 
-    private string[] userNames = new string[2];
+    private GameConstants gameConstants = new();
+    
+    private char[,] gameFieldSymbols;
 
-    private char[] cellLabels = { 'x', 'o' };
+    private int playersCount;
 
     private int userNumberForTurn = 0;
 
@@ -14,61 +16,111 @@
 
     private int columnNumberForTurn;
 
-    public TicTacToeGame()
+    public TicTacToeGame(int playersCount = 2)
     {
-        for (int i = 0; i < 3; i++)
-            for (int j = 0; j < 3; j++)
+        this.playersCount = playersCount;   
+        playersInfo = new(playersCount);
+        gameFieldSymbols = new char[gameConstants.GameFieldSize, gameConstants.GameFieldSize];  
+        for (int i = 0; i < gameConstants.GameFieldSize; i++)
+            for (int j = 0; j < gameConstants.GameFieldSize; j++)
                 gameFieldSymbols[i, j] = '.';
         SetUserNames();
+        SetUserSymbols();
+    }
+    public void LaunchGame()
+    {
+        while (successfulTurnsCount < gameConstants.GameFieldSize * gameConstants.GameFieldSize)
+        {
+            WriteUserNumberForTurn();
+            DrawGameField();
+            PerformOneUserTurn();
+            if (IsSomeoneWon())
+            {
+                DrawGameField();
+                Console.WriteLine($"Player {playersInfo.GetPlayerName(userNumberForTurn)} won!");
+                return;
+            }
+            userNumberForTurn = userNumberForTurn == playersCount - 1 ? 0 : userNumberForTurn + 1;
+        }
+        DrawGameField();
+        Console.WriteLine("Draw!");
+    }
+    public void ConfirmGameRepeat()
+    {
+        ConsoleKey confirmKey;
+        do
+        {
+            Console.WriteLine("Do you want to play again? (Enter - yes, any other key - no)");
+            confirmKey = Console.ReadKey().Key;
+            if (confirmKey != ConsoleKey.Enter)
+                Environment.Exit(0);
+        } while (confirmKey != ConsoleKey.Enter);
     }
     private void DrawGameField()
     {
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < gameConstants.GameFieldSize; i++)
         {
-            for (int j = 0; j < 2; j++)
+            for (int j = 0; j < gameConstants.GameFieldSize - 1; j++)
                 Console.Write($"{gameFieldSymbols[i, j]}|");
-            Console.WriteLine(gameFieldSymbols[i, 2]);
-            if (i != 2)
+            Console.WriteLine(gameFieldSymbols[i, gameConstants.GameFieldSize - 1]);
+            if (i != gameConstants.GameFieldSize - 1)
                 Console.WriteLine("------");
         }
+    }
+    private void SetUserSymbols()
+    {
+        for (int i = 0; i < playersCount; i++)
+            playersInfo.SetPlayerSymbol(gameConstants.TicTacToeSymbols[i], i);
     }
     private void SetUserNames()
     {
         int nameLength;
         bool wrongNameLength;
-        for (int i = 0; i < 2; i++)
+        string possiblePlayerName;
+        for (int i = 0; i < playersCount; i++)
         {
             do
             {
-                Console.Clear();
-                Console.Write($"Игрок {i + 1}, введите своё имя: ");
-                userNames[i] = Console.ReadLine();
-                nameLength = userNames[i].Length;
-                wrongNameLength = nameLength > 25 || nameLength == 0;
+                Console.WriteLine($"Player {i + 1}, enter your name: ");
+                possiblePlayerName = Console.ReadLine();
+                nameLength = possiblePlayerName.Length;
+                wrongNameLength = nameLength > gameConstants.MaxAllowedNameLength || nameLength == 0;
                 if (wrongNameLength)
                 {
-                    Console.Write("Введенное имя слишком длинное или слишком короткое. Длина вашего имени не должна быть больше 25 символов");
+                    Console.WriteLine($"Your name is too short or too long. Your name can't be longer than {gameConstants.MaxAllowedNameLength} symbols");
                     Console.ReadKey();
                 }
+                else
+                    playersInfo.SetPlayerName(possiblePlayerName, i);
             } while (wrongNameLength);
         }
     }
     private void WriteUserNumberForTurn()
     {
-        Console.WriteLine($"Ход игрока {userNames[userNumberForTurn]}");
+        Console.WriteLine($"Player {playersInfo.GetPlayerName(userNumberForTurn)}'s turn");
     }
 
     private bool IsUserInputProper(string input)
     {
-        char[] properValues = { '0', '1', '2' };
-        bool isInputProper = input.Length == 3 && input[1] == ' ' && properValues.Contains(input[0]) && properValues.Contains(input[2]);
+        string[] properValues = new string[gameConstants.GameFieldSize];
+        for (int i = 0; i < gameConstants.GameFieldSize; i++)
+            properValues[i] = (i+1).ToString();
+        input = input.Trim();
+        int firstSpaceIndex = input.IndexOf(' ');
+        if (firstSpaceIndex < 0)
+            return false;
+        int lastSpaceIndex = input.LastIndexOf(' ');
+        string possibleStringRowNumber = input.Substring(0, firstSpaceIndex);
+        string possibleStringColumnNumber = input.Substring(lastSpaceIndex + 1, input.Length - 1 - lastSpaceIndex);
+        string stringBeforeColumnAndRowNumber = input.Substring(firstSpaceIndex, lastSpaceIndex - firstSpaceIndex + 1);
+        bool isInputProper = string.IsNullOrWhiteSpace(stringBeforeColumnAndRowNumber) && properValues.Contains(possibleStringRowNumber) && properValues.Contains(possibleStringColumnNumber);
         if (!isInputProper)
             return false;
         else
         {
-            rowNumberForTurn = int.Parse(input.Substring(0, 1));
-            columnNumberForTurn = int.Parse(input.Substring(2, 1));
-            if (gameFieldSymbols[rowNumberForTurn, columnNumberForTurn] == '.')
+            rowNumberForTurn = int.Parse(possibleStringRowNumber);
+            columnNumberForTurn = int.Parse(possibleStringColumnNumber);
+            if (gameFieldSymbols[rowNumberForTurn - 1, columnNumberForTurn - 1] == '.')
                 return true;
             else
                 return false;
@@ -78,92 +130,71 @@
     {
         string userInput;
         bool wrongFieldNumberInput;
-        int attemptsLeftCount = 3;
+        int attemptsLeftCount = gameConstants.MaxAllowedRetriesCount;
         do
         {
-            Console.WriteLine($"Игрок {userNames[userNumberForTurn]}, введите через пробел номер строки и номер столбца клетки, которую вы бы хотели занять");
+            Console.WriteLine($"Player {playersInfo.GetPlayerName(userNumberForTurn)}, enter the row number and column number of the cell you would like to occupy, separated by a space");
             userInput = Console.ReadLine();
             wrongFieldNumberInput = !IsUserInputProper(userInput);
             if (wrongFieldNumberInput)
             {
                 attemptsLeftCount--;
-                Console.WriteLine($"Вы ввели данные в неверном формате или клетка, которую вы хотели занять, уже занята. Осталось {attemptsLeftCount} попыток, прежде чем ход перейдет к сопернику");
+                Console.WriteLine($"You entered the data in the wrong format or the cell you wanted to occupy is already occupied. There are {attemptsLeftCount} attempts left before the move goes to the opponent");
             }
         } while (wrongFieldNumberInput && attemptsLeftCount != 0);
         if (attemptsLeftCount != 0)
         {
-            gameFieldSymbols[rowNumberForTurn, columnNumberForTurn] = cellLabels[userNumberForTurn];
+            gameFieldSymbols[rowNumberForTurn - 1, columnNumberForTurn - 1] = playersInfo.GetPlayerSymbol(userNumberForTurn);
             successfulTurnsCount++;
         }
     }
 
     private bool IsSomeoneWon()
     {
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < gameConstants.GameFieldSize; i++)
         {
             char firstCharInRow = gameFieldSymbols[i, 0];
             if (firstCharInRow == '.')
                 continue;
-            for (int j = 1; j < 3; j++)
+            for (int j = 1; j < gameConstants.GameFieldSize; j++)
             {
                 if (gameFieldSymbols[i, j] != firstCharInRow)
                     break;
-                if (j == 2)
+                if (j == gameConstants.GameFieldSize - 1)
                     return true;
             }
         }
-        for (int j = 0; j < 3; j++)
+        for (int j = 0; j < gameConstants.GameFieldSize; j++)
         {
             char firstCharInColumn = gameFieldSymbols[0, j];
             if (firstCharInColumn == '.')
                 continue;
-            for (int i = 1; i < 3; i++)
+            for (int i = 1; i < gameConstants.GameFieldSize; i++)
             {
                 if (gameFieldSymbols[i, j] != firstCharInColumn)
                     break;
-                if (i == 2)
+                if (i == gameConstants.GameFieldSize - 1)
                     return true;
             }
         }
         char firstCharInMainDiagonal = gameFieldSymbols[0, 0];
         if (firstCharInMainDiagonal != '.')
-            for (int i = 1; i < 3; i++)
+            for (int i = 1; i < gameConstants.GameFieldSize; i++)
             {
                 if (gameFieldSymbols[i, i] != firstCharInMainDiagonal)
                     break;
-                if (i == 2)
+                if (i == gameConstants.GameFieldSize - 1)
                     return true;
             }
-        char firstCharInSecondaryDiagonal = gameFieldSymbols[0, 2];
+        char firstCharInSecondaryDiagonal = gameFieldSymbols[0, gameConstants.GameFieldSize - 1];
         if (firstCharInSecondaryDiagonal != '.')
-            for (int i = 1; i < 3; i++)
+            for (int i = 1; i < gameConstants.GameFieldSize; i++)
             {
-                if (gameFieldSymbols[i, 2 - i] != firstCharInSecondaryDiagonal)
+                if (gameFieldSymbols[i, gameConstants.GameFieldSize - 1 - i] != firstCharInSecondaryDiagonal)
                     break;
-                if (i == 2)
+                if (i == gameConstants.GameFieldSize - 1)
                     return true;
             }
         return false;
-    }
-    public void LaunchGame()
-    {
-        while (successfulTurnsCount < 9)
-        {
-            Console.Clear();
-            WriteUserNumberForTurn();
-            DrawGameField();
-            PerformOneUserTurn();
-            if (IsSomeoneWon())
-            {
-                Console.Clear();
-                DrawGameField();
-                Console.WriteLine($"Победил игрок {userNames[userNumberForTurn]} !");
-                return;
-            }
-            userNumberForTurn = 1 - userNumberForTurn;
-        }
-        Console.Clear();
-        DrawGameField();
-        Console.WriteLine("Победила дружба!");
     }
 };

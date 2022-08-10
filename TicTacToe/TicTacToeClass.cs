@@ -9,20 +9,25 @@
     private int userNumberForTurn = 0;
 
     private int successfulTurnsCount = 0;
+
+    private int rowNumberForTurn;
+
+    private int columnNumberForTurn;
+
     public TicTacToeGame()
     {
         for (int i = 0; i < 3; i++)
             for (int j = 0; j < 3; j++)
-                this.gameFieldSymbols[i, j] = '.';
-        this.SetUserNames();
+                gameFieldSymbols[i, j] = '.';
+        SetUserNames();
     }
     private void DrawGameField()
     {
         for (int i = 0; i < 3; i++)
         {
             for (int j = 0; j < 2; j++)
-                Console.Write($"{this.gameFieldSymbols[i, j]}|");
-            Console.WriteLine(this.gameFieldSymbols[i, 2]);
+                Console.Write($"{gameFieldSymbols[i, j]}|");
+            Console.WriteLine(gameFieldSymbols[i, 2]);
             if (i != 2)
                 Console.WriteLine("------");
         }
@@ -37,12 +42,12 @@
             {
                 Console.Clear();
                 Console.Write($"Игрок {i + 1}, введите своё имя: ");
-                this.userNames[i] = Console.ReadLine();
-                nameLength = this.userNames[i].Length;
+                userNames[i] = Console.ReadLine();
+                nameLength = userNames[i].Length;
                 wrongNameLength = nameLength > 25 || nameLength == 0;
                 if (wrongNameLength)
                 {
-                    Console.Write("Введенное имя слишком длинное или слишком короткое");
+                    Console.Write("Введенное имя слишком длинное или слишком короткое. Длина вашего имени не должна быть больше 25 символов");
                     Console.ReadKey();
                 }
             } while (wrongNameLength);
@@ -50,10 +55,10 @@
     }
     private void WriteUserNumberForTurn()
     {
-        Console.WriteLine($"Ход игрока {this.userNames[this.userNumberForTurn]}");
+        Console.WriteLine($"Ход игрока {userNames[userNumberForTurn]}");
     }
 
-    private bool IsUserInputProper(string input, ref int rowNum, ref int colNum)
+    private bool IsUserInputProper(string input)
     {
         char[] properValues = { '0', '1', '2' };
         bool isInputProper = input.Length == 3 && input[1] == ' ' && properValues.Contains(input[0]) && properValues.Contains(input[2]);
@@ -61,9 +66,9 @@
             return false;
         else
         {
-            rowNum = int.Parse(input.Substring(0, 1));
-            colNum = int.Parse(input.Substring(2, 1));
-            if (this.gameFieldSymbols[rowNum, colNum] == '.')
+            rowNumberForTurn = int.Parse(input.Substring(0, 1));
+            columnNumberForTurn = int.Parse(input.Substring(2, 1));
+            if (gameFieldSymbols[rowNumberForTurn, columnNumberForTurn] == '.')
                 return true;
             else
                 return false;
@@ -74,13 +79,11 @@
         string userInput;
         bool wrongFieldNumberInput;
         int attemptsLeftCount = 3;
-        int rowFillingNumber = new int();
-        int columnFillingNumber = new int();
         do
         {
-            Console.WriteLine($"Игрок {this.userNames[this.userNumberForTurn]}, введите через пробел номер строки и номер столбца клетки, которую вы бы хотели занять");
+            Console.WriteLine($"Игрок {userNames[userNumberForTurn]}, введите через пробел номер строки и номер столбца клетки, которую вы бы хотели занять");
             userInput = Console.ReadLine();
-            wrongFieldNumberInput = !this.IsUserInputProper(userInput, ref rowFillingNumber, ref columnFillingNumber);
+            wrongFieldNumberInput = !IsUserInputProper(userInput);
             if (wrongFieldNumberInput)
             {
                 attemptsLeftCount--;
@@ -89,8 +92,8 @@
         } while (wrongFieldNumberInput && attemptsLeftCount != 0);
         if (attemptsLeftCount != 0)
         {
-            this.gameFieldSymbols[rowFillingNumber, columnFillingNumber] = this.cellLabels[this.userNumberForTurn];
-            this.successfulTurnsCount++;
+            gameFieldSymbols[rowNumberForTurn, columnNumberForTurn] = cellLabels[userNumberForTurn];
+            successfulTurnsCount++;
         }
     }
 
@@ -98,12 +101,12 @@
     {
         for (int i = 0; i < 3; i++)
         {
-            char firstCharInRow = this.gameFieldSymbols[i, 0];
+            char firstCharInRow = gameFieldSymbols[i, 0];
             if (firstCharInRow == '.')
                 continue;
             for (int j = 1; j < 3; j++)
             {
-                if (this.gameFieldSymbols[i, j] != firstCharInRow)
+                if (gameFieldSymbols[i, j] != firstCharInRow)
                     break;
                 if (j == 2)
                     return true;
@@ -111,31 +114,31 @@
         }
         for (int j = 0; j < 3; j++)
         {
-            char firstCharInColumn = this.gameFieldSymbols[0, j];
+            char firstCharInColumn = gameFieldSymbols[0, j];
             if (firstCharInColumn == '.')
                 continue;
             for (int i = 1; i < 3; i++)
             {
-                if (this.gameFieldSymbols[i, j] != firstCharInColumn)
+                if (gameFieldSymbols[i, j] != firstCharInColumn)
                     break;
                 if (i == 2)
                     return true;
             }
         }
-        char firstCharInMainDiagonal = this.gameFieldSymbols[0, 0];
+        char firstCharInMainDiagonal = gameFieldSymbols[0, 0];
         if (firstCharInMainDiagonal != '.')
             for (int i = 1; i < 3; i++)
             {
-                if (this.gameFieldSymbols[i, i] != firstCharInMainDiagonal)
+                if (gameFieldSymbols[i, i] != firstCharInMainDiagonal)
                     break;
                 if (i == 2)
                     return true;
             }
-        char firstCharInSecondaryDiagonal = this.gameFieldSymbols[0, 2];
+        char firstCharInSecondaryDiagonal = gameFieldSymbols[0, 2];
         if (firstCharInSecondaryDiagonal != '.')
             for (int i = 1; i < 3; i++)
             {
-                if (this.gameFieldSymbols[i, 2 - i] != firstCharInSecondaryDiagonal)
+                if (gameFieldSymbols[i, 2 - i] != firstCharInSecondaryDiagonal)
                     break;
                 if (i == 2)
                     return true;
@@ -144,23 +147,23 @@
     }
     public void LaunchGame()
     {
-        while (this.successfulTurnsCount < 9)
+        while (successfulTurnsCount < 9)
         {
             Console.Clear();
-            this.WriteUserNumberForTurn();
-            this.DrawGameField();
-            this.PerformOneUserTurn();
-            if (this.IsSomeoneWon())
+            WriteUserNumberForTurn();
+            DrawGameField();
+            PerformOneUserTurn();
+            if (IsSomeoneWon())
             {
                 Console.Clear();
-                this.DrawGameField();
-                Console.WriteLine($"Победил игрок {this.userNames[this.userNumberForTurn]} !");
+                DrawGameField();
+                Console.WriteLine($"Победил игрок {userNames[userNumberForTurn]} !");
                 return;
             }
-            this.userNumberForTurn = 1 - this.userNumberForTurn;
+            userNumberForTurn = 1 - userNumberForTurn;
         }
         Console.Clear();
-        this.DrawGameField();
+        DrawGameField();
         Console.WriteLine("Победила дружба!");
     }
 };

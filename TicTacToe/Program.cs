@@ -1,15 +1,14 @@
-﻿void PlayTicTacToe()
+﻿using GameProcessTool;
+class Program
 {
-    while (true)
+    static void Main(string[] args)
     {
-        TicTacToeGame myGame = new();
-        myGame.LaunchGame();
-        myGame.ConfirmGameRepeat();
+        while (true)
+        {
+            TicTacToeGame myGame = new();
+            myGame.LaunchGame();
+            myGame.ConfirmGameRepeat();
+        }
     }
 }
-
-PlayTicTacToe();
-
-
-
 

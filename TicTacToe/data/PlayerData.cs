@@ -1,16 +1,11 @@
 ﻿namespace Players;
 public class PlayerData
 {
-    private char _symbol;
-    public char Symbol{
-        set => _symbol = value;
-        get => _symbol;   
-    }
+    public char Symbol{ get; set; }
+    public string Name { get; private set; }
 
-    private string _name;
-    public string Name
+    public PlayerData(string name)
     {
-        set => _name = value; 
-        get => _name;    
-    }
+        Name = name;
+    }   
 }

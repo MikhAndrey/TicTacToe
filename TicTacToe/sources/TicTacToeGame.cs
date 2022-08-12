@@ -5,7 +5,7 @@ public class TicTacToeGame
 {
     private PlayerData[] _players;
 
-    private const char _fieldSymbol = '.';
+    private char _fieldSymbol;
 
     private char[,] _gameFieldSymbols;
 
@@ -27,20 +27,32 @@ public class TicTacToeGame
 
     private int _columnNumberForTurn;
 
+    private char _horizontalSeparator;
+    
+    private char _verticalSeparator;
+    
+    private char _inputSeparator;
+
     public TicTacToeGame(int playersCount = GameConstants.PlayersCount,
         int fieldSize = GameConstants.GameFieldSize,
         int maxNameLength = GameConstants.MaxAllowedNameLength,
         int maxRetriesCount = GameConstants.MaxAllowedRetriesCount,
-        string symbols = GameConstants.TicTacToeSymbols)
+        string symbols = GameConstants.TicTacToeSymbols,
+        char fieldSymbol = GameConstants.FieldSymbol,   
+        char verticalSeparator = GameConstants.VerticalFieldSeparator,
+        char horizontalSeparator = GameConstants.HorizontalFieldSeparator,
+        char inputSeparator = GameConstants.UserTurnInputSeparator)
     {
         _playersCount = playersCount;
         _fieldSize = fieldSize;
         _maxNameLength = maxNameLength;
         _maxRetriesCount = maxRetriesCount;
         _userSymbols = symbols;
-        _players = new PlayerData[_playersCount];
-        for (int i = 0; i < _playersCount; i++)
-            _players[i] = new();
+        _fieldSymbol = fieldSymbol;
+        _verticalSeparator = verticalSeparator;
+        _horizontalSeparator = horizontalSeparator;
+        _inputSeparator = inputSeparator;
+        _players = new PlayerData[_playersCount];   
         _gameFieldSymbols = new char[_fieldSize, _fieldSize];
         for (int i = 0; i < _fieldSize; i++)
             for (int j = 0; j < _fieldSize; j++)
@@ -82,13 +94,13 @@ public class TicTacToeGame
         for (int i = 0; i < _fieldSize; i++)
         {
             for (int j = 0; j < _fieldSize - 1; j++)
-                Console.Write($"{_gameFieldSymbols[i, j]}|");
+                Console.Write($"{_gameFieldSymbols[i, j]}{_verticalSeparator}");
             Console.WriteLine(_gameFieldSymbols[i, _fieldSize - 1]);
             if (i != _fieldSize - 1)
             {
                 for (int j = 0; j < _fieldSize - 1; j++)
-                    Console.Write("--");
-                Console.WriteLine("--");
+                    Console.Write($"{_horizontalSeparator}{_horizontalSeparator}");
+                Console.WriteLine($"{_horizontalSeparator}{_horizontalSeparator}");
             }
         }
     }
@@ -114,7 +126,7 @@ public class TicTacToeGame
                     Console.ReadKey();
                 }
                 else
-                    _players[i].Name = possiblePlayerName;
+                    _players[i] = new(possiblePlayerName);
             } while (wrongNameLength);
         }
     }
@@ -129,10 +141,10 @@ public class TicTacToeGame
         for (int i = 0; i < _fieldSize; i++)
             properValues[i] = (i + 1).ToString();
         input = input.Trim();
-        int firstSpaceIndex = input.IndexOf(' ');
+        int firstSpaceIndex = input.IndexOf(_inputSeparator);
         if (firstSpaceIndex < 0)
             return false;
-        int lastSpaceIndex = input.LastIndexOf(' ');
+        int lastSpaceIndex = input.LastIndexOf(_inputSeparator);
         string possibleStringRowNumber = input.Substring(0, firstSpaceIndex);
         string possibleStringColumnNumber = input.Substring(lastSpaceIndex + 1, input.Length - 1 - lastSpaceIndex);
         string stringBeforeColumnAndRowNumber = input.Substring(firstSpaceIndex, lastSpaceIndex - firstSpaceIndex + 1);

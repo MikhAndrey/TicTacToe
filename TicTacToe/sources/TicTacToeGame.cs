@@ -27,10 +27,10 @@ public class TicTacToeGame
 
     private int _columnNumberForTurn;
 
-    public TicTacToeGame(int playersCount = GameConstants.PlayersCount, 
-        int fieldSize = GameConstants.GameFieldSize, 
-        int maxNameLength = GameConstants.MaxAllowedNameLength, 
-        int maxRetriesCount = GameConstants.MaxAllowedRetriesCount, 
+    public TicTacToeGame(int playersCount = GameConstants.PlayersCount,
+        int fieldSize = GameConstants.GameFieldSize,
+        int maxNameLength = GameConstants.MaxAllowedNameLength,
+        int maxRetriesCount = GameConstants.MaxAllowedRetriesCount,
         string symbols = GameConstants.TicTacToeSymbols)
     {
         _playersCount = playersCount;

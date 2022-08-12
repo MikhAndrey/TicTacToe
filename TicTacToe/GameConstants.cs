@@ -1,5 +1,5 @@
 ﻿namespace GameConsts;
-public sealed class GameConstants
+public static class GameConstants
 {
     public const string TicTacToeSymbols = "xo";
     public const int GameFieldSize = 3;

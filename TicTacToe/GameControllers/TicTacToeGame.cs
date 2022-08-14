@@ -1,6 +1,5 @@
-﻿using GameConsts;
-using Players;
-namespace GameProcessTool;
+﻿namespace TicTacToe.GameControllers;
+using TicTacToe.Storage;
 public class TicTacToeGame
 {
     private PlayerData[] _players;

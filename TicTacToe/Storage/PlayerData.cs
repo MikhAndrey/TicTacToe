@@ -1,4 +1,4 @@
-﻿namespace Players;
+﻿namespace TicTacToe.Storage;
 public class PlayerData
 {
     public char Symbol{ get; set; }

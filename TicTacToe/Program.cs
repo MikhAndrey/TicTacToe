@@ -1,4 +1,5 @@
-﻿using GameProcessTool;
+﻿namespace TicTacToe;
+using TicTacToe.GameControllers;
 class Program
 {
     static void Main(string[] args)

@@ -1,36 +1,26 @@
 ﻿namespace TicTacToe.GameControllers;
-using TicTacToe.Storage;
+using TicTacToe.Entities;
+using TicTacToe.Helpers;
 public class TicTacToeGame
 {
-    private PlayerData[] _players;
-
+    private Player[] _players;
     private char _fieldSymbol;
-
     private char[,] _gameFieldSymbols;
-
     private int _fieldSize;
-
     private int _maxNameLength;
-
     private int _maxRetriesCount;
-
     private string _userSymbols;
-
     private int _playersCount;
-
     private int _userNumberForTurn = 0;
-
     private int _successfulTurnsCount = 0;
-
     private int _rowNumberForTurn;
-
     private int _columnNumberForTurn;
-
     private char _horizontalSeparator;
-    
     private char _verticalSeparator;
-    
-    private char _inputSeparator;
+    private char _turnInputSeparator;
+    private char _userDataInputSeparator;
+    private int _minAllowedAge;
+    private int _maxAllowedAge; 
 
     public TicTacToeGame(int playersCount = GameConstants.PlayersCount,
         int fieldSize = GameConstants.GameFieldSize,
@@ -40,7 +30,10 @@ public class TicTacToeGame
         char fieldSymbol = GameConstants.FieldSymbol,   
         char verticalSeparator = GameConstants.VerticalFieldSeparator,
         char horizontalSeparator = GameConstants.HorizontalFieldSeparator,
-        char inputSeparator = GameConstants.UserTurnInputSeparator)
+        char turnInputSeparator = GameConstants.UserTurnInputSeparator,
+        char userDataInputSeparator = GameConstants.UserDataInputSeparator,
+        int minAllowedAge = GameConstants.MinAllowedAge,
+        int maxAllowedAge = GameConstants.MaxAllowedAge)
     {
         _playersCount = playersCount;
         _fieldSize = fieldSize;
@@ -50,13 +43,16 @@ public class TicTacToeGame
         _fieldSymbol = fieldSymbol;
         _verticalSeparator = verticalSeparator;
         _horizontalSeparator = horizontalSeparator;
-        _inputSeparator = inputSeparator;
-        _players = new PlayerData[_playersCount];   
+        _turnInputSeparator = turnInputSeparator;
+        _userDataInputSeparator = userDataInputSeparator;
+        _minAllowedAge = minAllowedAge;
+        _maxAllowedAge = maxAllowedAge; 
+        _players = new Player[_playersCount];   
         _gameFieldSymbols = new char[_fieldSize, _fieldSize];
         for (int i = 0; i < _fieldSize; i++)
             for (int j = 0; j < _fieldSize; j++)
                 _gameFieldSymbols[i, j] = _fieldSymbol;
-        SetUserNames();
+        SetUsersPersonalData();
         SetUserSymbols();
     }
     public void LaunchGame()
@@ -108,57 +104,36 @@ public class TicTacToeGame
         for (int i = 0; i < _playersCount; i++)
             _players[i].Symbol = _userSymbols[i];
     }
-    private void SetUserNames()
+    private void SetUsersPersonalData()
     {
-        bool wrongNameLength;
-        string? possiblePlayerName;
+        bool correctUserInput = false;
+        string? possiblePlayerPersonalData;
+        string playerName = "";
+        int playerId = 0;
+        int playerAge = 0;
         for (int i = 0; i < _playersCount; i++)
         {
             do
             {
-                Console.WriteLine($"Player {i + 1}, enter your name: ");
-                possiblePlayerName = Console.ReadLine();
-                wrongNameLength = string.IsNullOrEmpty(possiblePlayerName) || possiblePlayerName.Length > _maxNameLength;
-                if (wrongNameLength)
-                {
-                    Console.WriteLine($"Your name is too short or too long. Your name can't be longer than {_maxNameLength} symbols");
-                    Console.ReadKey();
-                }
-                else
-                    _players[i] = new(possiblePlayerName);
-            } while (wrongNameLength);
+                Console.WriteLine($"Player {i + 1}, enter your id, name and age, separated by space");
+                possiblePlayerPersonalData = Console.ReadLine();
+                correctUserInput = UserDataInputCheck.isUserDataInputProper(possiblePlayerPersonalData, 
+                    _userDataInputSeparator, 
+                    _maxNameLength, 
+                    _minAllowedAge, 
+                    _maxAllowedAge, 
+                    ref correctUserInput, 
+                    ref playerId,
+                    ref playerName,
+                    ref playerAge);
+                if (correctUserInput)
+                    _players[i] = new(playerName, playerId, playerAge);
+            } while (!correctUserInput);
         }
     }
     private void WriteUserNumberForTurn()
     {
         Console.WriteLine($"Player {_players[_userNumberForTurn].Name}'s turn");
-    }
-
-    private bool IsUserInputProper(string input)
-    {
-        string[] properValues = new string[_fieldSize];
-        for (int i = 0; i < _fieldSize; i++)
-            properValues[i] = (i + 1).ToString();
-        input = input.Trim();
-        int firstSpaceIndex = input.IndexOf(_inputSeparator);
-        if (firstSpaceIndex < 0)
-            return false;
-        int lastSpaceIndex = input.LastIndexOf(_inputSeparator);
-        string possibleStringRowNumber = input.Substring(0, firstSpaceIndex);
-        string possibleStringColumnNumber = input.Substring(lastSpaceIndex + 1, input.Length - 1 - lastSpaceIndex);
-        string stringBeforeColumnAndRowNumber = input.Substring(firstSpaceIndex, lastSpaceIndex - firstSpaceIndex + 1);
-        bool isInputProper = string.IsNullOrWhiteSpace(stringBeforeColumnAndRowNumber) && properValues.Contains(possibleStringRowNumber) && properValues.Contains(possibleStringColumnNumber);
-        if (!isInputProper)
-            return false;
-        else
-        {
-            _rowNumberForTurn = int.Parse(possibleStringRowNumber);
-            _columnNumberForTurn = int.Parse(possibleStringColumnNumber);
-            if (_gameFieldSymbols[_rowNumberForTurn - 1, _columnNumberForTurn - 1] == _fieldSymbol)
-                return true;
-            else
-                return false;
-        }
     }
     private void PerformOneUserTurn()
     {
@@ -172,7 +147,13 @@ public class TicTacToeGame
             if (string.IsNullOrEmpty(userInput))
                 wrongFieldNumberInput = true;
             else
-                wrongFieldNumberInput = !IsUserInputProper(userInput);
+                wrongFieldNumberInput = !UserTurnCheck.IsUserTurnInputProper(userInput, 
+                    _fieldSize, 
+                    _turnInputSeparator, 
+                    ref _rowNumberForTurn, 
+                    ref _columnNumberForTurn, 
+                    _gameFieldSymbols, 
+                    _fieldSymbol);
             if (wrongFieldNumberInput)
             {
                 attemptsLeftCount--;

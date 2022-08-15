@@ -1,6 +1,8 @@
 ﻿namespace TicTacToe.GameControllers;
 using TicTacToe.Entities;
 using TicTacToe.Helpers;
+using TicTacToe.Interfaces;
+using TicTacToe.DBRepositories;
 public class TicTacToeGame
 {
     private Player[] _players;
@@ -20,7 +22,8 @@ public class TicTacToeGame
     private char _turnInputSeparator;
     private char _userDataInputSeparator;
     private int _minAllowedAge;
-    private int _maxAllowedAge; 
+    private int _maxAllowedAge;
+    private IRepository<Player> _playersDB;
 
     public TicTacToeGame(int playersCount = GameConstants.PlayersCount,
         int fieldSize = GameConstants.GameFieldSize,
@@ -49,6 +52,7 @@ public class TicTacToeGame
         _maxAllowedAge = maxAllowedAge; 
         _players = new Player[_playersCount];   
         _gameFieldSymbols = new char[_fieldSize, _fieldSize];
+        _playersDB = new SQLPlayersRepository();
         for (int i = 0; i < _fieldSize; i++)
             for (int j = 0; j < _fieldSize; j++)
                 _gameFieldSymbols[i, j] = _fieldSymbol;
@@ -164,6 +168,21 @@ public class TicTacToeGame
         {
             _gameFieldSymbols[_rowNumberForTurn - 1, _columnNumberForTurn - 1] = _players[_userNumberForTurn].Symbol;
             _successfulTurnsCount++;
+        }
+    }
+
+    public void UpdatePlayersDB()
+    {
+        for (int i = 0; i < 2; i++)
+        {
+            Player? possiblePlayerFromDB = _playersDB.GetItem(_players[i].Id);
+            if (possiblePlayerFromDB == null)
+                _playersDB.Add(_players[i]);
+            else
+            {
+                possiblePlayerFromDB = _players[i];
+                _playersDB.Save();
+            }    
         }
     }
 

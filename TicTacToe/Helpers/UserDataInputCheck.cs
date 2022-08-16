@@ -52,7 +52,7 @@
                 return false;
             }
             age = possibleAge;
-            string possiblePlayerName = inputString.Substring(firstSeparatorIndex, lastSeparatorIndex - firstSeparatorIndex + 1);
+            string possiblePlayerName = inputString.Substring(firstSeparatorIndex + 1, lastSeparatorIndex - firstSeparatorIndex - 1);
             bool isNameProper = !string.IsNullOrEmpty(possiblePlayerName) && possiblePlayerName.Length <= maxNameLength;
             if (!isNameProper)
             {

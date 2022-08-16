@@ -25,7 +25,7 @@ namespace TicTacToe.DBRepositories
         }
         public void Update(Player player)
         {
-            _db.Entry(player).State = EntityState.Modified;
+            _db.Update(player);
         }
         public void Delete(int id)
         {

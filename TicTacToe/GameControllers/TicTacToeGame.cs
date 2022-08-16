@@ -58,6 +58,7 @@ public class TicTacToeGame
                 _gameFieldSymbols[i, j] = _fieldSymbol;
         SetUsersPersonalData();
         SetUserSymbols();
+        UpdatePlayersDB();
     }
     public void LaunchGame()
     {
@@ -180,9 +181,10 @@ public class TicTacToeGame
                 _playersDB.Add(_players[i]);
             else
             {
-                possiblePlayerFromDB = _players[i];
-                _playersDB.Save();
-            }    
+                possiblePlayerFromDB.Name = _players[i].Name;
+                possiblePlayerFromDB.Age = _players[i].Age;
+            }
+            _playersDB.Save();
         }
     }
 

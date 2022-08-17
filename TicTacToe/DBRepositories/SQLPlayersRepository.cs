@@ -6,14 +6,14 @@ namespace TicTacToe.DBRepositories
 {
     public class SQLPlayersRepository : IRepository<Player>
     {
-        private PlayerContext _db;
+        private ApplicationContext _db;
         public SQLPlayersRepository()
         {
             _db = new();
         }
-        public IEnumerable<Player> GetList()
+        public List<Player> GetList()
         {
-            return _db.Players;
+            return _db.Players.ToList();
         }
         public Player GetItem(int id)
         {

@@ -13,5 +13,6 @@ public static class GameConstants
     public const char UserTurnInputSeparator = ' ';
     public const char UserDataInputSeparator = ' ';
     public const char FieldSymbol = '.';
+    public const string JSONGenerationCommands = "/generatelastgameresult,/generateresultsforcurrentplayers,/generateallresults,/next";
 }
 

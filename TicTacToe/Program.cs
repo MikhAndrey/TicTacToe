@@ -8,6 +8,7 @@ class Program
         {
             TicTacToeGame myGame = new();
             myGame.LaunchGame();
+            myGame.GenerateJSONReports();
             myGame.ConfirmGameRepeat();
         }
     }

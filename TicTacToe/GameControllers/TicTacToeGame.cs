@@ -3,6 +3,7 @@ using TicTacToe.Entities;
 using TicTacToe.Helpers;
 using TicTacToe.Interfaces;
 using TicTacToe.DBRepositories;
+using System.Text.Json;
 public class TicTacToeGame
 {
     private Player[] _players;
@@ -23,7 +24,11 @@ public class TicTacToeGame
     private char _userDataInputSeparator;
     private int _minAllowedAge;
     private int _maxAllowedAge;
+    private DateTime _gameStartDate;
+    private DateTime _gameEndDate;
     private IRepository<Player> _playersDB;
+    private IRepository<GameDataForDB> _gamesDB;
+    private string[] _jsonGenerationCommands;
 
     public TicTacToeGame(int playersCount = GameConstants.PlayersCount,
         int fieldSize = GameConstants.GameFieldSize,
@@ -36,8 +41,10 @@ public class TicTacToeGame
         char turnInputSeparator = GameConstants.UserTurnInputSeparator,
         char userDataInputSeparator = GameConstants.UserDataInputSeparator,
         int minAllowedAge = GameConstants.MinAllowedAge,
-        int maxAllowedAge = GameConstants.MaxAllowedAge)
+        int maxAllowedAge = GameConstants.MaxAllowedAge,
+        string JSONGenerationCommands = GameConstants.JSONGenerationCommands)
     {
+        _gameStartDate = DateTime.Now;
         _playersCount = playersCount;
         _fieldSize = fieldSize;
         _maxNameLength = maxNameLength;
@@ -53,6 +60,8 @@ public class TicTacToeGame
         _players = new Player[_playersCount];   
         _gameFieldSymbols = new char[_fieldSize, _fieldSize];
         _playersDB = new SQLPlayersRepository();
+        _gamesDB = new SQLGamesRepository();
+        _jsonGenerationCommands = JSONGenerationCommands.Split(',');
         for (int i = 0; i < _fieldSize; i++)
             for (int j = 0; j < _fieldSize; j++)
                 _gameFieldSymbols[i, j] = _fieldSymbol;
@@ -62,6 +71,16 @@ public class TicTacToeGame
     }
     public void LaunchGame()
     {
+        GameDataForDB thisGameData;
+        void FinishCurrentGame(string message, int? winnerId)
+        {
+            _gameEndDate = DateTime.Now;
+            DrawGameField();
+            Console.WriteLine(message);
+            thisGameData = new(_gameStartDate, _gameEndDate, _userSymbols[0], _userSymbols[1], _players[0].Id, _players[1].Id, winnerId);
+            _gamesDB.Add(thisGameData);
+            _gamesDB.Save();
+        }
         while (_successfulTurnsCount < _fieldSize * _fieldSize)
         {
             WriteUserNumberForTurn();
@@ -69,14 +88,12 @@ public class TicTacToeGame
             PerformOneUserTurn();
             if (IsSomeoneWon())
             {
-                DrawGameField();
-                Console.WriteLine($"Player {_players[_userNumberForTurn].Name} won!");
+                FinishCurrentGame($"Player {_players[_userNumberForTurn].Name} won!", _players[_userNumberForTurn].Id);
                 return;
             }
             _userNumberForTurn = _userNumberForTurn == _playersCount - 1 ? 0 : _userNumberForTurn + 1;
         }
-        DrawGameField();
-        Console.WriteLine("Draw!");
+        FinishCurrentGame("Draw!", null);
     }
     public void ConfirmGameRepeat()
     {
@@ -171,7 +188,6 @@ public class TicTacToeGame
             _successfulTurnsCount++;
         }
     }
-
     public void UpdatePlayersDB()
     {
         for (int i = 0; i < 2; i++)
@@ -187,7 +203,61 @@ public class TicTacToeGame
             _playersDB.Save();
         }
     }
-
+    public async void GenerateJSONReports() {
+        List<GameDataForDB> gamesList = _gamesDB.GetList();
+        int gamesCount = gamesList.Count();
+        while (true)
+        {
+            FileStream lastGameFile = new FileStream("lastgameresult.json", FileMode.OpenOrCreate);
+            FileStream currentPlayersGamesFile = new FileStream("currentplayersgamesresults.json", FileMode.OpenOrCreate);
+            FileStream allGamesFile = new FileStream("allgamesresults.json", FileMode.OpenOrCreate);
+            Console.WriteLine("Please enter one of the following commands:" +
+                $"\n{_jsonGenerationCommands[0]}: generate file with last game's review" +
+                $"\n{_jsonGenerationCommands[1]}: generate file with current players games review"+
+                $"\n{_jsonGenerationCommands[2]}: generate file all games review"+
+                $"\n{_jsonGenerationCommands[3]}: go to finish game/start new game options selection");
+            string? userGenerationCommand = Console.ReadLine();
+            int userGenerationCommandIndex = Array.IndexOf(_jsonGenerationCommands, userGenerationCommand);
+            switch (userGenerationCommandIndex)
+            {
+                case 0:
+                    lastGameFile.SetLength(0);
+                    await JsonSerializer.SerializeAsync<GameDataForDB>(lastGameFile, gamesList[gamesCount - 1]);
+                    Console.WriteLine("\nLast game info was successfully saved\n");
+                    break;
+                case 1:
+                    currentPlayersGamesFile.SetLength(0);
+                    foreach (GameDataForDB game in gamesList)
+                    {
+                        bool isTheGameOfRequiredTwoPlayers = game.FirstPlayerId == _players[0].Id && game.SecondPlayerId == _players[1].Id;
+                        bool isTheGameOfRequiredTwoPlayersReverse = game.FirstPlayerId == _players[1].Id && game.SecondPlayerId == _players[0].Id;
+                        if (isTheGameOfRequiredTwoPlayers || isTheGameOfRequiredTwoPlayersReverse)
+                            await JsonSerializer.SerializeAsync<GameDataForDB>(currentPlayersGamesFile, game);
+                    }
+                    Console.WriteLine("\nInfo about all games between current players was saved\n");
+                    break;
+                case 2:
+                    allGamesFile.SetLength(0);
+                    foreach (GameDataForDB game in gamesList)
+                    {
+                        await JsonSerializer.SerializeAsync<GameDataForDB>(allGamesFile, game);
+                    }
+                    Console.WriteLine("\nInfo about all games was saved\n");
+                    break;
+                case 3:
+                    lastGameFile.Close();
+                    currentPlayersGamesFile.Close();
+                    allGamesFile.Close();
+                    return;
+                default:
+                    Console.WriteLine("\nYou have entered the wrong command\n");
+                    break;
+            }
+            lastGameFile.Close();
+            currentPlayersGamesFile.Close();
+            allGamesFile.Close();
+        }
+    }
     private bool IsSomeoneWon()
     {
         for (int i = 0; i < _fieldSize; i++)

@@ -10,9 +10,7 @@ namespace TicTacToe
             while (true)
             {
                 TicTacToeGame myGame = new();
-                myGame.LaunchGame();
-                myGame.GenerateJSONReports();
-                myGame.ConfirmGameRepeat();
+                myGame.Play();
             }
         }
     }

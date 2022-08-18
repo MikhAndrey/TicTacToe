@@ -73,7 +73,13 @@ namespace TicTacToe.GameControllers
             SetUserSymbols();
             UpdatePlayersDB();
         }
-        public void LaunchGame()
+        public void Play()
+        {
+            LaunchGame();
+            GenerateJSONReports();
+            ConfirmGameRepeat();
+        }
+        private void LaunchGame()
         {
             GameDataForDB thisGameData;
             void FinishCurrentGame(string message, string? winnerName, int? winnerId)
@@ -99,37 +105,6 @@ namespace TicTacToe.GameControllers
             }
             FinishCurrentGame(Messages.DrawMessage, null, null);
         }
-        public void ConfirmGameRepeat()
-        {
-            ConsoleKey confirmKey;
-            do
-            {
-                Console.WriteLine(Messages.RepeatConfirmMessage);
-                confirmKey = Console.ReadKey().Key;
-                if (confirmKey != ConsoleKey.Enter)
-                    Environment.Exit(0);
-            } while (confirmKey != ConsoleKey.Enter);
-        }
-        private void DrawGameField()
-        {
-            for (int i = 0; i < _fieldSize; i++)
-            {
-                for (int j = 0; j < _fieldSize - 1; j++)
-                    Console.Write($"{_gameFieldSymbols[i, j]}{_verticalSeparator}");
-                Console.WriteLine(_gameFieldSymbols[i, _fieldSize - 1]);
-                if (i != _fieldSize - 1)
-                {
-                    for (int j = 0; j < _fieldSize - 1; j++)
-                        Console.Write($"{_horizontalSeparator}{_horizontalSeparator}");
-                    Console.WriteLine($"{_horizontalSeparator}{_horizontalSeparator}");
-                }
-            }
-        }
-        private void SetUserSymbols()
-        {
-            for (int i = 0; i < _playersCount; i++)
-                _players[i].Symbol = _userSymbols[i];
-        }
         private void SetUsersPersonalData()
         {
             bool correctUserInput;
@@ -137,7 +112,7 @@ namespace TicTacToe.GameControllers
             string playerName = "";
             int playerId = 0;
             int playerAge = 0;
-            List<int> bookedIds = new(); 
+            List<int> bookedIds = new();
             for (int i = 0; i < _playersCount; i++)
             {
                 do
@@ -161,9 +136,44 @@ namespace TicTacToe.GameControllers
                 } while (!correctUserInput);
             }
         }
+        private void SetUserSymbols()
+        {
+            for (int i = 0; i < _playersCount; i++)
+                _players[i].Symbol = _userSymbols[i];
+        }
+        private void UpdatePlayersDB()
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                Player? possiblePlayerFromDB = _playersDB.GetItem(_players[i].Id);
+                if (possiblePlayerFromDB == null)
+                    _playersDB.Add(_players[i]);
+                else
+                {
+                    possiblePlayerFromDB.Name = _players[i].Name;
+                    possiblePlayerFromDB.Age = _players[i].Age;
+                }
+                _playersDB.Save();
+            }
+        }
         private void WriteUserNumberForTurn()
         {
             Console.WriteLine(Messages.CurrentTurnPlayerDeclarationMessage, _players[_userNumberForTurn].Name);
+        }
+        private void DrawGameField()
+        {
+            for (int i = 0; i < _fieldSize; i++)
+            {
+                for (int j = 0; j < _fieldSize - 1; j++)
+                    Console.Write($"{_gameFieldSymbols[i, j]}{_verticalSeparator}");
+                Console.WriteLine(_gameFieldSymbols[i, _fieldSize - 1]);
+                if (i != _fieldSize - 1)
+                {
+                    for (int j = 0; j < _fieldSize - 1; j++)
+                        Console.Write($"{_horizontalSeparator}{_horizontalSeparator}");
+                    Console.WriteLine($"{_horizontalSeparator}{_horizontalSeparator}");
+                }
+            }
         }
         private void PerformOneUserTurn()
         {
@@ -196,22 +206,55 @@ namespace TicTacToe.GameControllers
                 _successfulTurnsCount++;
             }
         }
-        public void UpdatePlayersDB()
+        private bool IsSomeoneWon()
         {
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < _fieldSize; i++)
             {
-                Player? possiblePlayerFromDB = _playersDB.GetItem(_players[i].Id);
-                if (possiblePlayerFromDB == null)
-                    _playersDB.Add(_players[i]);
-                else
+                char firstCharInRow = _gameFieldSymbols[i, 0];
+                if (firstCharInRow == _fieldSymbol)
+                    continue;
+                for (int j = 1; j < _fieldSize; j++)
                 {
-                    possiblePlayerFromDB.Name = _players[i].Name;
-                    possiblePlayerFromDB.Age = _players[i].Age;
+                    if (_gameFieldSymbols[i, j] != firstCharInRow)
+                        break;
+                    if (j == _fieldSize - 1)
+                        return true;
                 }
-                _playersDB.Save();
             }
+            for (int j = 0; j < _fieldSize; j++)
+            {
+                char firstCharInColumn = _gameFieldSymbols[0, j];
+                if (firstCharInColumn == _fieldSymbol)
+                    continue;
+                for (int i = 1; i < _fieldSize; i++)
+                {
+                    if (_gameFieldSymbols[i, j] != firstCharInColumn)
+                        break;
+                    if (i == _fieldSize - 1)
+                        return true;
+                }
+            }
+            char firstCharInMainDiagonal = _gameFieldSymbols[0, 0];
+            if (firstCharInMainDiagonal != _fieldSymbol)
+                for (int i = 1; i < _fieldSize; i++)
+                {
+                    if (_gameFieldSymbols[i, i] != firstCharInMainDiagonal)
+                        break;
+                    if (i == _fieldSize - 1)
+                        return true;
+                }
+            char firstCharInSecondaryDiagonal = _gameFieldSymbols[0, _fieldSize - 1];
+            if (firstCharInSecondaryDiagonal != _fieldSymbol)
+                for (int i = 1; i < _fieldSize; i++)
+                {
+                    if (_gameFieldSymbols[i, _fieldSize - 1 - i] != firstCharInSecondaryDiagonal)
+                        break;
+                    if (i == _fieldSize - 1)
+                        return true;
+                }
+            return false;
         }
-        public async void GenerateJSONReports()
+        private async void GenerateJSONReports()
         {
             List<GameDataForDB> gamesList = _gamesDB.GetList();
             int gamesCount = gamesList.Count();
@@ -289,53 +332,16 @@ namespace TicTacToe.GameControllers
                 }
             }
         }
-        private bool IsSomeoneWon()
+        private void ConfirmGameRepeat()
         {
-            for (int i = 0; i < _fieldSize; i++)
+            ConsoleKey confirmKey;
+            do
             {
-                char firstCharInRow = _gameFieldSymbols[i, 0];
-                if (firstCharInRow == _fieldSymbol)
-                    continue;
-                for (int j = 1; j < _fieldSize; j++)
-                {
-                    if (_gameFieldSymbols[i, j] != firstCharInRow)
-                        break;
-                    if (j == _fieldSize - 1)
-                        return true;
-                }
-            }
-            for (int j = 0; j < _fieldSize; j++)
-            {
-                char firstCharInColumn = _gameFieldSymbols[0, j];
-                if (firstCharInColumn == _fieldSymbol)
-                    continue;
-                for (int i = 1; i < _fieldSize; i++)
-                {
-                    if (_gameFieldSymbols[i, j] != firstCharInColumn)
-                        break;
-                    if (i == _fieldSize - 1)
-                        return true;
-                }
-            }
-            char firstCharInMainDiagonal = _gameFieldSymbols[0, 0];
-            if (firstCharInMainDiagonal != _fieldSymbol)
-                for (int i = 1; i < _fieldSize; i++)
-                {
-                    if (_gameFieldSymbols[i, i] != firstCharInMainDiagonal)
-                        break;
-                    if (i == _fieldSize - 1)
-                        return true;
-                }
-            char firstCharInSecondaryDiagonal = _gameFieldSymbols[0, _fieldSize - 1];
-            if (firstCharInSecondaryDiagonal != _fieldSymbol)
-                for (int i = 1; i < _fieldSize; i++)
-                {
-                    if (_gameFieldSymbols[i, _fieldSize - 1 - i] != firstCharInSecondaryDiagonal)
-                        break;
-                    if (i == _fieldSize - 1)
-                        return true;
-                }
-            return false;
+                Console.WriteLine(Messages.RepeatConfirmMessage);
+                confirmKey = Console.ReadKey().Key;
+                if (confirmKey != ConsoleKey.Enter)
+                    Environment.Exit(0);
+            } while (confirmKey != ConsoleKey.Enter);
         }
     };
 }

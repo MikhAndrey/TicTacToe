@@ -1,15 +1,20 @@
-﻿namespace TicTacToe;
-using TicTacToe.GameControllers;
-class Program
+﻿using TicTacToe.GameControllers;
+using TicTacToe.Helpers;
+namespace TicTacToe
 {
-    static void Main(string[] args)
+    class Program
     {
-        while (true)
+        static void Main(string[] args)
         {
-            TicTacToeGame myGame = new();
-            myGame.LaunchGame();
-            myGame.GenerateJSONReports();
-            myGame.ConfirmGameRepeat();
+            UICultureSettings.SetInitialUICulture();
+            UICultureSettings.SetUICulture();
+            while (true)
+            {
+                TicTacToeGame myGame = new();
+                myGame.LaunchGame();
+                myGame.GenerateJSONReports();
+                myGame.ConfirmGameRepeat();
+            }
         }
     }
 }

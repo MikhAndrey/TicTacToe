@@ -1,4 +1,5 @@
-﻿namespace TicTacToe.Helpers
+﻿using TicTacToe.Resources;
+namespace TicTacToe.Helpers
 {
     public static class UserDataInputCheck
     {
@@ -7,20 +8,19 @@
             int maxNameLength,
             int minAge,
             int maxAge,
-            ref bool isInputCorrect,
             ref int id,
             ref string name,
             ref int age)
         {
-            void ShowErrorMessage(string message)
+            void ShowErrorMessage(string message, params object[] values)
             {
-                Console.WriteLine(message);
+                Console.WriteLine(message,values);
                 Console.ReadKey();
             }
 
             if (string.IsNullOrEmpty(inputString))
             {
-                ShowErrorMessage("Your input's format is wrong. Please, try again");
+                ShowErrorMessage(Messages.WrongInputFormatMessage);
                 return false;
             }
             inputString = inputString.Trim();
@@ -28,13 +28,13 @@
             int lastSeparatorIndex = inputString.LastIndexOf(separator);
             if (firstSeparatorIndex == -1 || lastSeparatorIndex == -1 || firstSeparatorIndex == lastSeparatorIndex)
             {
-                ShowErrorMessage("Your input's format is wrong. Please, try again");
+                ShowErrorMessage(Messages.WrongInputFormatMessage);
                 return false;
             }
             bool isIdANumber = int.TryParse(inputString.Substring(0, firstSeparatorIndex), out int possibleId);
             if (!isIdANumber)
             {
-                ShowErrorMessage("Your id must be an integer. Please, try again");
+                ShowErrorMessage(Messages.NonIntegerIdMessage);
                 return false;
             }
             id = possibleId;
@@ -42,13 +42,13 @@
                 out int possibleAge);
             if (!isAgeANumber)
             {
-                ShowErrorMessage("Your age must be an integer. Please, try again");
+                ShowErrorMessage(Messages.NonIntegerAgeMessage);
                 return false;
             }
             bool isAgeProper = possibleAge > minAge && possibleAge < maxAge;
             if (!isAgeProper)
             {
-                ShowErrorMessage($"Your age must be between {minAge} and {maxAge}");
+                ShowErrorMessage(Messages.WrongAgeMessage,minAge,maxAge);
                 return false;
             }
             age = possibleAge;
@@ -56,7 +56,7 @@
             bool isNameProper = !string.IsNullOrEmpty(possiblePlayerName) && possiblePlayerName.Length <= maxNameLength;
             if (!isNameProper)
             {
-                ShowErrorMessage($"Your name shouldn't be empty and its length can't exceed {maxNameLength} symbols");
+                ShowErrorMessage(Messages.WrongNameLengthMessage, maxNameLength);
                 return false;
             }
             name = possiblePlayerName;

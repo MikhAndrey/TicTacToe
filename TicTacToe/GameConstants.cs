@@ -14,5 +14,7 @@ public static class GameConstants
     public const char UserDataInputSeparator = ' ';
     public const char FieldSymbol = '.';
     public const string JSONGenerationCommands = "/generatelastgameresult,/generateresultsforcurrentplayers,/generateallresults,/next";
+    public const string SupportedLanguagesAbbreviations = "ru,en,fr,de,es,it,nl,pt,ar,zh,ja";
+    public const string SupportedLanguagesNames = "Русский,English,Français,Deutsche,Español,Italiano,Nederlands,Português,اللغة العربية,中國人,日本";
 }
 

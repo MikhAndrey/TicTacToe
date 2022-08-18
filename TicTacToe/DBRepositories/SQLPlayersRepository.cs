@@ -1,7 +1,6 @@
 ﻿using TicTacToe.Interfaces;
 using TicTacToe.Entities;
 using TicTacToe.Contexts;
-using Microsoft.EntityFrameworkCore;
 namespace TicTacToe.DBRepositories
 {
     public class SQLPlayersRepository : IRepository<Player>

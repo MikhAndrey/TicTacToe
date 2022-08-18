@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AllGamesSaveMessage" xml:space="preserve">
-    <value>Informazioni su tutti i giochi salvati</value>
+    <value>Informazioni su tutti i giochi salvati nel file {0}</value>
   </data>
   <data name="AskForDataInputMessage" xml:space="preserve">
     <value>Giocatore {0}, inserisci il tuo ID, nome ed età separati da uno spazio</value>
@@ -142,10 +142,10 @@
     <value>vai a fine partita/inizia nuova partita</value>
   </data>
   <data name="GamesWithCurrentPlayersSaveMessage" xml:space="preserve">
-    <value>Le informazioni su tutte le partite tra giocatori attuali vengono salvate</value>
+    <value>Le informazioni su tutte le partite tra giocatori attuali vengono salvate nel file {0}</value>
   </data>
   <data name="LastGameSaveMessage" xml:space="preserve">
-    <value>Le ultime informazioni sul gioco sono state salvate correttamente</value>
+    <value>Le informazioni sull'ultimo gioco sono state salvate correttamente nel file {0}</value>
   </data>
   <data name="NonIntegerAgeMessage" xml:space="preserve">
     <value>La tua età deve essere un numero intero. Per favore riprova</value>
@@ -156,8 +156,17 @@
   <data name="RepeatConfirmMessage" xml:space="preserve">
     <value>Vuoi giocare di nuovo? (Invio - sì, qualsiasi altra chiave - no)</value>
   </data>
+  <data name="SaveToFileErrorMessage" xml:space="preserve">
+    <value>Si è verificato un errore durante la scrittura dei dati nel file</value>
+  </data>
   <data name="SecondCommandMessage" xml:space="preserve">
     <value>generare un file con una panoramica delle partite dei giocatori attuali</value>
+  </data>
+  <data name="SelectLanguageMessage" xml:space="preserve">
+    <value>Inserisci una delle combinazioni di caratteri suggerite per selezionare la lingua</value>
+  </data>
+  <data name="SelectLanguageRetryMessage" xml:space="preserve">
+    <value>Hai inserito la combinazione di caratteri sbagliata. Riprova</value>
   </data>
   <data name="ThirdCommandMessage" xml:space="preserve">
     <value>genera un file di panoramica di tutti i giochi</value>

@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AllGamesSaveMessage" xml:space="preserve">
-    <value>保存されたすべてのゲームに関する情報</value>
+    <value>ファイル {0} に保存されたすべてのゲームに関する情報</value>
   </data>
   <data name="AskForDataInputMessage" xml:space="preserve">
     <value>プレーヤー {0}、ID、名前、年齢をスペースで区切って入力してください</value>
@@ -142,10 +142,10 @@
     <value>ゲームを終了する/新しいゲームを開始する</value>
   </data>
   <data name="GamesWithCurrentPlayersSaveMessage" xml:space="preserve">
-    <value>現在のプレイヤー間のすべてのゲームに関する情報が保存されます</value>
+    <value>現在のプレーヤー間のすべてのゲームに関する情報は、ファイル {0} に保存されます</value>
   </data>
   <data name="LastGameSaveMessage" xml:space="preserve">
-    <value>最後のゲーム情報が正常に保存されました</value>
+    <value>前回のゲームに関する情報がファイル {0} に正常に保存されました</value>
   </data>
   <data name="NonIntegerAgeMessage" xml:space="preserve">
     <value>年齢は整数でなければなりません。もう一度お試しください</value>
@@ -156,8 +156,17 @@
   <data name="RepeatConfirmMessage" xml:space="preserve">
     <value>また遊びたいですか？ (Enter - はい、その他のキー - いいえ)</value>
   </data>
+  <data name="SaveToFileErrorMessage" xml:space="preserve">
+    <value>ファイルへのデータの書き込み中にエラーが発生しました</value>
+  </data>
   <data name="SecondCommandMessage" xml:space="preserve">
     <value>現在のプレーヤーのゲームの概要を含むファイルを生成する</value>
+  </data>
+  <data name="SelectLanguageMessage" xml:space="preserve">
+    <value>言語を選択するには、提案された文字の組み合わせのいずれかを入力してください</value>
+  </data>
+  <data name="SelectLanguageRetryMessage" xml:space="preserve">
+    <value>入力した文字の組み合わせが間違っています。 再試行</value>
   </data>
   <data name="ThirdCommandMessage" xml:space="preserve">
     <value>すべてのゲームの概要ファイルを生成する</value>

@@ -61,7 +61,7 @@ namespace TicTacToe.Resources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Info about all games was saved.
+        ///   Ищет локализованную строку, похожую на Information about all games saved to file {0}.
         /// </summary>
         public static string AllGamesSaveMessage {
             get {
@@ -133,7 +133,7 @@ namespace TicTacToe.Resources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Info about all games between current players was saved.
+        ///   Ищет локализованную строку, похожую на Information about all games between current players is saved to file {0}.
         /// </summary>
         public static string GamesWithCurrentPlayersSaveMessage {
             get {
@@ -142,7 +142,7 @@ namespace TicTacToe.Resources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Last game info was successfully saved.
+        ///   Ищет локализованную строку, похожую на Information about the last game was successfully saved to the file {0}.
         /// </summary>
         public static string LastGameSaveMessage {
             get {
@@ -178,11 +178,38 @@ namespace TicTacToe.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на An error occurred while writing data to file.
+        /// </summary>
+        public static string SaveToFileErrorMessage {
+            get {
+                return ResourceManager.GetString("SaveToFileErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на generate file with current players games review.
         /// </summary>
         public static string SecondCommandMessage {
             get {
                 return ResourceManager.GetString("SecondCommandMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Please enter one of the suggested character combinations to select the language.
+        /// </summary>
+        public static string SelectLanguageMessage {
+            get {
+                return ResourceManager.GetString("SelectLanguageMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на You have entered the wrong combination of characters. Try again.
+        /// </summary>
+        public static string SelectLanguageRetryMessage {
+            get {
+                return ResourceManager.GetString("SelectLanguageRetryMessage", resourceCulture);
             }
         }
         

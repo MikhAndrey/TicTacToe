@@ -210,11 +210,9 @@ namespace TicTacToe.GameControllers
         {
             List<GameDataForDB> gamesList = _gamesDB.GetList();
             int gamesCount = gamesList.Count();
+            string fileName;
             while (true)
             {
-                FileStream lastGameFile = new FileStream("lastgameresult.json", FileMode.OpenOrCreate);
-                FileStream currentPlayersGamesFile = new FileStream("currentplayersgamesresults.json", FileMode.OpenOrCreate);
-                FileStream allGamesFile = new FileStream("allgamesresults.json", FileMode.OpenOrCreate);
                 Console.WriteLine(Messages.AskForEnterCommandMessage +
                     $"\n{_jsonGenerationCommands[0]}:" + Messages.FirstCommandMessage +
                     $"\n{_jsonGenerationCommands[1]}:" + Messages.SecondCommandMessage +
@@ -225,41 +223,65 @@ namespace TicTacToe.GameControllers
                 switch (userGenerationCommandIndex)
                 {
                     case 0:
-                        lastGameFile.SetLength(0);
-                        await JsonSerializer.SerializeAsync<GameDataForDB>(lastGameFile, gamesList[gamesCount - 1]);
-                        Console.WriteLine("\n" + Messages.LastGameSaveMessage + "\n");
+                        fileName = "lastgameresult.json";
+                        try
+                        {
+                            FileStream lastGameFile = new FileStream(fileName, FileMode.OpenOrCreate);
+                            lastGameFile.SetLength(0);
+                            await JsonSerializer.SerializeAsync<GameDataForDB>(lastGameFile, gamesList[gamesCount - 1]);
+                            lastGameFile.Close();
+                            Console.WriteLine("\n" + Messages.LastGameSaveMessage + "\n", fileName);
+                        }
+                        catch
+                        {
+                            Console.WriteLine("\n" + Messages.SaveToFileErrorMessage + "\n");
+                        }
                         break;
                     case 1:
-                        currentPlayersGamesFile.SetLength(0);
-                        foreach (GameDataForDB game in gamesList)
+                        try
                         {
-                            bool isTheGameOfRequiredTwoPlayers = game.FirstPlayerId == _players[0].Id && game.SecondPlayerId == _players[1].Id;
-                            bool isTheGameOfRequiredTwoPlayersReverse = game.FirstPlayerId == _players[1].Id && game.SecondPlayerId == _players[0].Id;
-                            if (isTheGameOfRequiredTwoPlayers || isTheGameOfRequiredTwoPlayersReverse)
-                                await JsonSerializer.SerializeAsync<GameDataForDB>(currentPlayersGamesFile, game);
+                            fileName = "currentplayersgamesresults.json";
+                            FileStream currentPlayersGamesFile = new FileStream(fileName, FileMode.OpenOrCreate);
+                            currentPlayersGamesFile.SetLength(0);
+                            foreach (GameDataForDB game in gamesList)
+                            {
+                                bool isTheGameOfRequiredTwoPlayers = game.FirstPlayerId == _players[0].Id && game.SecondPlayerId == _players[1].Id;
+                                bool isTheGameOfRequiredTwoPlayersReverse = game.FirstPlayerId == _players[1].Id && game.SecondPlayerId == _players[0].Id;
+                                if (isTheGameOfRequiredTwoPlayers || isTheGameOfRequiredTwoPlayersReverse)
+                                    await JsonSerializer.SerializeAsync<GameDataForDB>(currentPlayersGamesFile, game);
+                            }
+                            currentPlayersGamesFile.Close();
+                            Console.WriteLine("\n" + Messages.GamesWithCurrentPlayersSaveMessage + "\n", fileName);
                         }
-                        Console.WriteLine("\n" + Messages.GamesWithCurrentPlayersSaveMessage + "\n");
+                        catch
+                        {
+                            Console.WriteLine("\n" + Messages.SaveToFileErrorMessage + "\n");
+                        }
                         break;
                     case 2:
-                        allGamesFile.SetLength(0);
-                        foreach (GameDataForDB game in gamesList)
+                        try
                         {
-                            await JsonSerializer.SerializeAsync<GameDataForDB>(allGamesFile, game);
+                            fileName = "allgamesresults.json";
+                            FileStream allGamesFile = new FileStream(fileName, FileMode.OpenOrCreate);
+                            allGamesFile.SetLength(0);
+                            foreach (GameDataForDB game in gamesList)
+                            {
+                                await JsonSerializer.SerializeAsync<GameDataForDB>(allGamesFile, game);
+                            }
+                            allGamesFile.Close();
+                            Console.WriteLine("\n" + Messages.AllGamesSaveMessage + "\n", fileName);
                         }
-                        Console.WriteLine("\n" + Messages.AllGamesSaveMessage + "\n");
+                        catch
+                        {
+                            Console.WriteLine("\n" + Messages.SaveToFileErrorMessage + "\n");
+                        }
                         break;
                     case 3:
-                        lastGameFile.Close();
-                        currentPlayersGamesFile.Close();
-                        allGamesFile.Close();
                         return;
                     default:
-                        Console.WriteLine("\n" + Messages.WrongCommandMessage + "\n");
+                        Console.WriteLine(Messages.WrongCommandMessage);
                         break;
                 }
-                lastGameFile.Close();
-                currentPlayersGamesFile.Close();
-                allGamesFile.Close();
             }
         }
         private bool IsSomeoneWon()

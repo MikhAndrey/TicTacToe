@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AllGamesSaveMessage" xml:space="preserve">
-    <value>Информация обо всех играх сохранена</value>
+    <value>Информация обо всех играх сохранена в файл {0}</value>
   </data>
   <data name="AskForDataInputMessage" xml:space="preserve">
     <value>Игрок {0}, введите свой идентификатор, имя и возраст через пробел</value>
@@ -142,10 +142,10 @@
     <value>перейти к завершению игры/началу новой игры</value>
   </data>
   <data name="GamesWithCurrentPlayersSaveMessage" xml:space="preserve">
-    <value>Информация обо всех играх между текущими игроками сохранена</value>
+    <value>Информация обо всех играх между текущими игроками сохранена в файл {0}</value>
   </data>
   <data name="LastGameSaveMessage" xml:space="preserve">
-    <value>Информация о последней игре успешно сохранена</value>
+    <value>Информация о последней игре успешно сохранена в файл {0}</value>
   </data>
   <data name="NonIntegerAgeMessage" xml:space="preserve">
     <value>Ваш возраст должен быть целым числом. Пожалуйста, попробуйте еще раз</value>
@@ -156,8 +156,17 @@
   <data name="RepeatConfirmMessage" xml:space="preserve">
     <value>Вы хотите играть снова? (Enter - да, любая другая клавиша - нет)</value>
   </data>
+  <data name="SaveToFileErrorMessage" xml:space="preserve">
+    <value>Произошла ошибка при записи данных в файл</value>
+  </data>
   <data name="SecondCommandMessage" xml:space="preserve">
     <value>сгенерировать файл с обзором игр текущих игроков</value>
+  </data>
+  <data name="SelectLanguageMessage" xml:space="preserve">
+    <value>Пожалуйста, введите одну из предложенных комбинации символов для выбора языка</value>
+  </data>
+  <data name="SelectLanguageRetryMessage" xml:space="preserve">
+    <value>Вы ввели неправильную комбинацию символов. Попробуйте снова</value>
   </data>
   <data name="ThirdCommandMessage" xml:space="preserve">
     <value>сгенерировать файл обзора всех игр</value>

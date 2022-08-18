@@ -1,13 +1,10 @@
 ﻿using System.Globalization;
+using TicTacToe.Resources;
 
 namespace TicTacToe.Helpers
 {
     public static class UICultureSettings
     {
-        public static void SetInitialUICulture()
-        {
-            CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo("en");
-        }
         public static void SetUICulture(string languagesNamesString = GameConstants.SupportedLanguagesNames,
             string languagesAbbreviationsString = GameConstants.SupportedLanguagesAbbreviations)
         {
@@ -16,7 +13,7 @@ namespace TicTacToe.Helpers
             int languagesCount = languagesNames.Length;
             while (true)
             {
-                Console.WriteLine("Please, enter one of the the suggested character sequences to choose your language:");
+                Console.WriteLine(Messages.SelectLanguageMessage);
                 for (int i = 0; i < languagesCount; i++)
                     Console.WriteLine($"{languagesAbbreviations[i]} - {languagesNames[i]};");
                 string? userLanguage = Console.ReadLine();
@@ -25,7 +22,7 @@ namespace TicTacToe.Helpers
                     CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo(userLanguage);
                     return;
                 }
-                Console.WriteLine("\nYou have entered wrong characters sequence. Please, try again\n");
+                Console.WriteLine("\n" + Messages.SelectLanguageRetryMessage + "\n");
             }
         }
     }

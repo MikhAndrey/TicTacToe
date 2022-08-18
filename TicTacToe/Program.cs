@@ -6,7 +6,6 @@ namespace TicTacToe
     {
         static void Main(string[] args)
         {
-            UICultureSettings.SetInitialUICulture();
             UICultureSettings.SetUICulture();
             while (true)
             {

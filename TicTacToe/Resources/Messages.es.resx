@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AllGamesSaveMessage" xml:space="preserve">
-    <value>Información sobre todos los juegos guardados</value>
+    <value>Información sobre todos los juegos guardados en el archivo {0}</value>
   </data>
   <data name="AskForDataInputMessage" xml:space="preserve">
     <value>Jugador {0}, ingresa tu ID, nombre y edad separados por un espacio</value>
@@ -142,10 +142,10 @@
     <value>ir al final del juego/comenzar nuevo juego</value>
   </data>
   <data name="GamesWithCurrentPlayersSaveMessage" xml:space="preserve">
-    <value>Se guarda información sobre todos los juegos entre los jugadores actuales</value>
+    <value>La información sobre todos los juegos entre los jugadores actuales se guarda en el archivo {0}</value>
   </data>
   <data name="LastGameSaveMessage" xml:space="preserve">
-    <value>La información del último juego se guardó con éxito</value>
+    <value>La información sobre el último juego se guardó correctamente en el archivo {0}</value>
   </data>
   <data name="NonIntegerAgeMessage" xml:space="preserve">
     <value>Su edad debe ser un número entero. Inténtalo de nuevo</value>
@@ -156,8 +156,17 @@
   <data name="RepeatConfirmMessage" xml:space="preserve">
     <value>¿Quieres jugar de nuevo? (Intro - sí, cualquier otra tecla - no)</value>
   </data>
+  <data name="SaveToFileErrorMessage" xml:space="preserve">
+    <value>Ocurrió un error al escribir datos en el archivo</value>
+  </data>
   <data name="SecondCommandMessage" xml:space="preserve">
     <value>generar un archivo con una descripción general de los juegos de los jugadores actuales</value>
+  </data>
+  <data name="SelectLanguageMessage" xml:space="preserve">
+    <value>Ingrese una de las combinaciones de caracteres sugeridas para seleccionar el idioma</value>
+  </data>
+  <data name="SelectLanguageRetryMessage" xml:space="preserve">
+    <value>Ha introducido una combinación incorrecta de caracteres. Intentar otra vez</value>
   </data>
   <data name="ThirdCommandMessage" xml:space="preserve">
     <value>generar un archivo de resumen de todos los juegos</value>

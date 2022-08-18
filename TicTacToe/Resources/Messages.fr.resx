@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AllGamesSaveMessage" xml:space="preserve">
-    <value>Informations sur toutes les parties sauvegardées</value>
+    <value>Informations sur tous les jeux enregistrés dans le fichier {0}</value>
   </data>
   <data name="AskForDataInputMessage" xml:space="preserve">
     <value>Joueur {0}, entrez votre identifiant, votre nom et votre âge séparés par un espace</value>
@@ -142,10 +142,10 @@
     <value>aller à la fin du jeu/démarrer un nouveau jeu</value>
   </data>
   <data name="GamesWithCurrentPlayersSaveMessage" xml:space="preserve">
-    <value>Les informations sur toutes les parties entre les joueurs actuels sont enregistrées</value>
+    <value>Les informations sur tous les jeux entre les joueurs actuels sont enregistrées dans le fichier {0}</value>
   </data>
   <data name="LastGameSaveMessage" xml:space="preserve">
-    <value>Dernières informations de jeu enregistrées avec succès</value>
+    <value>Les informations sur le dernier jeu ont été enregistrées avec succès dans le fichier {0}</value>
   </data>
   <data name="NonIntegerAgeMessage" xml:space="preserve">
     <value>Votre âge doit être un nombre entier. Veuillez réessayer</value>
@@ -156,8 +156,17 @@
   <data name="RepeatConfirmMessage" xml:space="preserve">
     <value>Voulez-vous rejouer ? (Entrée - oui, toute autre touche - non)</value>
   </data>
+  <data name="SaveToFileErrorMessage" xml:space="preserve">
+    <value>Une erreur s'est produite lors de l'écriture des données dans le fichier</value>
+  </data>
   <data name="SecondCommandMessage" xml:space="preserve">
     <value>générer un fichier avec un aperçu des parties des joueurs actuels</value>
+  </data>
+  <data name="SelectLanguageMessage" xml:space="preserve">
+    <value>Veuillez entrer l'une des combinaisons de caractères suggérées pour sélectionner la langue</value>
+  </data>
+  <data name="SelectLanguageRetryMessage" xml:space="preserve">
+    <value>Vous avez entré la mauvaise combinaison de caractères. Réessayer</value>
   </data>
   <data name="ThirdCommandMessage" xml:space="preserve">
     <value>générer un fichier de vue d'ensemble de tous les jeux</value>

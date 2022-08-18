@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AllGamesSaveMessage" xml:space="preserve">
-    <value>有關所有已保存遊戲的信息</value>
+    <value>有關保存到文件 {0} 的所有遊戲的信息</value>
   </data>
   <data name="AskForDataInputMessage" xml:space="preserve">
     <value>玩家 {0}，輸入您的 ID、姓名和年齡，用空格隔開</value>
@@ -142,10 +142,10 @@
     <value>結束遊戲/開始新遊戲</value>
   </data>
   <data name="GamesWithCurrentPlayersSaveMessage" xml:space="preserve">
-    <value>保存當前玩家之間所有遊戲的信息</value>
+    <value>當前玩家之間所有遊戲的信息保存到文件 {0}</value>
   </data>
   <data name="LastGameSaveMessage" xml:space="preserve">
-    <value>上次遊戲信息保存成功</value>
+    <value>有關上一場比賽的信息已成功保存到文件 {0}</value>
   </data>
   <data name="NonIntegerAgeMessage" xml:space="preserve">
     <value>您的年齡必須是整數。請再試一次</value>
@@ -156,8 +156,17 @@
   <data name="RepeatConfirmMessage" xml:space="preserve">
     <value>你想再玩一次嗎？ （輸入 - 是，任何其他鍵 - 否）</value>
   </data>
+  <data name="SaveToFileErrorMessage" xml:space="preserve">
+    <value>將數據寫入文件時出錯</value>
+  </data>
   <data name="SecondCommandMessage" xml:space="preserve">
     <value>生成一個包含當前玩家遊戲概覽的文件</value>
+  </data>
+  <data name="SelectLanguageMessage" xml:space="preserve">
+    <value>請輸入建議的字符組合之一以選擇語言</value>
+  </data>
+  <data name="SelectLanguageRetryMessage" xml:space="preserve">
+    <value>您輸入了錯誤的字符組合。 再試一次</value>
   </data>
   <data name="ThirdCommandMessage" xml:space="preserve">
     <value>生成所有遊戲的概覽文件</value>

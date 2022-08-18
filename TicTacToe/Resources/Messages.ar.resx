@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AllGamesSaveMessage" xml:space="preserve">
-    <value>معلومات حول جميع الألعاب المحفوظة</value>
+    <value>معلومات حول جميع الألعاب المحفوظة في ملف {0}</value>
   </data>
   <data name="AskForDataInputMessage" xml:space="preserve">
     <value>لاعب {0} ، أدخل المعرف والاسم والعمر مفصولة بمسافة</value>
@@ -142,30 +142,10 @@
     <value>اذهب إلى نهاية اللعبة / ابدأ لعبة جديدة</value>
   </data>
   <data name="GamesWithCurrentPlayersSaveMessage" xml:space="preserve">
-    <value>يتم حفظ المعلومات حول جميع الألعاب بين اللاعبين الحاليين</value>
+    <value>يتم حفظ المعلومات حول جميع الألعاب بين اللاعبين الحاليين في ملف {0}</value>
   </data>
   <data name="LastGameSaveMessage" xml:space="preserve">
-    <value>معلومات حول جميع الألعاب المحفوظة
-لاعب {0} ، أدخل المعرف والاسم والعمر مفصولة بمسافة
-الرجاء إدخال أحد الأوامر التالية:
-أيها اللاعب {0} ، أدخل رقم الصف ورقم العمود للخلية التي ترغب في شغلها ، مفصولة بمسافة.
-دور اللاعب {0}
-ألفت!
-إنشاء ملف مراجعة لأحدث لعبة
-اذهب إلى نهاية اللعبة / ابدأ لعبة جديدة
-يتم حفظ المعلومات حول جميع الألعاب بين اللاعبين الحاليين
-تم حفظ معلومات اللعبة الأخيرة بنجاح
-يجب أن يكون عمرك عددًا صحيحًا. حاول مرة اخرى
-يجب أن يكون المعرف الخاص بك عددًا صحيحًا. حاول مرة اخرى
-هل تريد اللعب مرة أخرى؟ (أدخل - نعم ، أي مفتاح آخر - لا)
-إنشاء ملف مع نظرة عامة على ألعاب اللاعبين الحاليين
-إنشاء ملف نظرة عامة لجميع الألعاب
-فاز اللاعب {0}!
-يجب أن يكون عمرك أكبر من {0} وأقل من {1} عام
-لقد أدخلت البيانات بتنسيق خاطئ ، أو أن الخلية التي تريد شغلها مشغولة بالفعل. بقي هناك {0} محاولة قبل تمرير الدور للخصم
-لقد أدخلت أمرًا غير صالح
-تنسيق الإدخال الخاص بك غير صحيح. حاول مرة اخرى
-يجب ألا يكون اسمك فارغًا ، ولا يمكن أن يتجاوز طوله {0} حرفًا.</value>
+    <value>معلومات حول جميع الألعاب المحفوظةتم حفظ المعلومات الخاصة باللعبة الأخيرة بنجاح في الملف {0}</value>
   </data>
   <data name="NonIntegerAgeMessage" xml:space="preserve">
     <value>يجب أن يكون عمرك عددًا صحيحًا. حاول مرة اخرى</value>
@@ -176,8 +156,17 @@
   <data name="RepeatConfirmMessage" xml:space="preserve">
     <value>هل تريد اللعب مرة أخرى؟ (أدخل - نعم ، أي مفتاح آخر - لا)</value>
   </data>
+  <data name="SaveToFileErrorMessage" xml:space="preserve">
+    <value>حدث خطأ أثناء كتابة البيانات في الملف</value>
+  </data>
   <data name="SecondCommandMessage" xml:space="preserve">
     <value>إنشاء ملف مع نظرة عامة على ألعاب اللاعبين الحاليين</value>
+  </data>
+  <data name="SelectLanguageMessage" xml:space="preserve">
+    <value>الرجاء إدخال إحدى مجموعات الأحرف المقترحة لتحديد اللغة</value>
+  </data>
+  <data name="SelectLanguageRetryMessage" xml:space="preserve">
+    <value>لقد أدخلت مجموعة خاطئة من الأحرف. حاول مرة أخرى</value>
   </data>
   <data name="ThirdCommandMessage" xml:space="preserve">
     <value>إنشاء ملف نظرة عامة لجميع الألعاب</value>

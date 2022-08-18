@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AllGamesSaveMessage" xml:space="preserve">
-    <value>Informações sobre todos os jogos salvos</value>
+    <value>Informações sobre todos os jogos salvos no arquivo {0}</value>
   </data>
   <data name="AskForDataInputMessage" xml:space="preserve">
     <value>Jogador {0}, digite seu ID, nome e idade separados por um espaço</value>
@@ -142,10 +142,10 @@
     <value>ir para o fim do jogo/começar um novo jogo</value>
   </data>
   <data name="GamesWithCurrentPlayersSaveMessage" xml:space="preserve">
-    <value>As informações sobre todos os jogos entre os jogadores atuais são salvas</value>
+    <value>As informações sobre todos os jogos entre os jogadores atuais são salvas no arquivo {0}</value>
   </data>
   <data name="LastGameSaveMessage" xml:space="preserve">
-    <value>Informações do último jogo salvas com sucesso</value>
+    <value>As informações sobre o último jogo foram salvas com sucesso no arquivo {0}</value>
   </data>
   <data name="NonIntegerAgeMessage" xml:space="preserve">
     <value>Sua idade deve ser um número inteiro. Por favor, tente novamente</value>
@@ -156,8 +156,17 @@
   <data name="RepeatConfirmMessage" xml:space="preserve">
     <value>Você quer jogar de novo? (Enter - sim, qualquer outra tecla - não)</value>
   </data>
+  <data name="SaveToFileErrorMessage" xml:space="preserve">
+    <value>Ocorreu um erro ao gravar dados no arquivo</value>
+  </data>
   <data name="SecondCommandMessage" xml:space="preserve">
     <value>gerar um arquivo com uma visão geral dos jogos dos jogadores atuais</value>
+  </data>
+  <data name="SelectLanguageMessage" xml:space="preserve">
+    <value>Insira uma das combinações de caracteres sugeridas para selecionar o idioma</value>
+  </data>
+  <data name="SelectLanguageRetryMessage" xml:space="preserve">
+    <value>Você digitou a combinação errada de caracteres. Tente novamente</value>
   </data>
   <data name="ThirdCommandMessage" xml:space="preserve">
     <value>gerar arquivo de visão geral de todos os jogos</value>

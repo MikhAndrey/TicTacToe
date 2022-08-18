@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AllGamesSaveMessage" xml:space="preserve">
-    <value>Informatie over alle opgeslagen spellen</value>
+    <value>Informatie over alle games die zijn opgeslagen in bestand {0}</value>
   </data>
   <data name="AskForDataInputMessage" xml:space="preserve">
     <value>Speler {0}, voer je ID, naam en leeftijd in, gescheiden door een spatie</value>
@@ -142,10 +142,10 @@
     <value>ga naar het einde van het spel/start een nieuw spel</value>
   </data>
   <data name="GamesWithCurrentPlayersSaveMessage" xml:space="preserve">
-    <value>Informatie over alle games tussen huidige spelers wordt opgeslagen</value>
+    <value>Informatie over alle games tussen huidige spelers wordt opgeslagen in bestand {0}</value>
   </data>
   <data name="LastGameSaveMessage" xml:space="preserve">
-    <value>Laatste game-informatie succesvol opgeslagen</value>
+    <value>Informatie over de laatste game is succesvol opgeslagen in het bestand {0}</value>
   </data>
   <data name="NonIntegerAgeMessage" xml:space="preserve">
     <value>Uw leeftijd moet een geheel getal zijn. Probeer het opnieuw</value>
@@ -156,8 +156,17 @@
   <data name="RepeatConfirmMessage" xml:space="preserve">
     <value>Wil je nog een keer spelen? (Enter - ja, elke andere toets - nee)</value>
   </data>
+  <data name="SaveToFileErrorMessage" xml:space="preserve">
+    <value>Er is een fout opgetreden tijdens het schrijven van gegevens naar een bestand</value>
+  </data>
   <data name="SecondCommandMessage" xml:space="preserve">
     <value>genereer een bestand met een overzicht van de spellen van huidige spelers</value>
+  </data>
+  <data name="SelectLanguageMessage" xml:space="preserve">
+    <value>Voer een van de voorgestelde tekencombinaties in om de taal te selecteren</value>
+  </data>
+  <data name="SelectLanguageRetryMessage" xml:space="preserve">
+    <value>U heeft de verkeerde combinatie van tekens ingevoerd. Probeer het nog eens</value>
   </data>
   <data name="ThirdCommandMessage" xml:space="preserve">
     <value>genereer overzichtsbestand van alle spellen</value>

@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AllGamesSaveMessage" xml:space="preserve">
-    <value>Informationen über alle gespeicherten Spiele</value>
+    <value>Informationen zu allen in Datei {0} gespeicherten Spielen</value>
   </data>
   <data name="AskForDataInputMessage" xml:space="preserve">
     <value>Spieler {0}, geben Sie Ihre ID, Ihren Namen und Ihr Alter getrennt durch ein Leerzeichen ein</value>
@@ -142,10 +142,10 @@
     <value>Spiel beenden/neues Spiel starten</value>
   </data>
   <data name="GamesWithCurrentPlayersSaveMessage" xml:space="preserve">
-    <value>Informationen über alle Spiele zwischen aktuellen Spielern werden gespeichert</value>
+    <value>Informationen über alle Spiele zwischen aktuellen Spielern werden in Datei {0} gespeichert.</value>
   </data>
   <data name="LastGameSaveMessage" xml:space="preserve">
-    <value>Letzte Spielinformationen erfolgreich gespeichert</value>
+    <value>Informationen über das letzte Spiel wurden erfolgreich in der Datei {0} gespeichert</value>
   </data>
   <data name="NonIntegerAgeMessage" xml:space="preserve">
     <value>Ihr Alter muss eine Ganzzahl sein. Bitte versuche es erneut</value>
@@ -156,8 +156,17 @@
   <data name="RepeatConfirmMessage" xml:space="preserve">
     <value>Willst du wieder spielen? (Eingabe - ja, jede andere Taste - nein)</value>
   </data>
+  <data name="SaveToFileErrorMessage" xml:space="preserve">
+    <value>Beim Schreiben von Daten in die Datei ist ein Fehler aufgetreten</value>
+  </data>
   <data name="SecondCommandMessage" xml:space="preserve">
     <value>Generieren Sie eine Datei mit einer Übersicht der Spiele aktueller Spieler</value>
+  </data>
+  <data name="SelectLanguageMessage" xml:space="preserve">
+    <value>Bitte geben Sie eine der vorgeschlagenen Zeichenkombinationen ein, um die Sprache auszuwählen</value>
+  </data>
+  <data name="SelectLanguageRetryMessage" xml:space="preserve">
+    <value>Sie haben die falsche Zeichenkombination eingegeben. Versuchen Sie es nochmal</value>
   </data>
   <data name="ThirdCommandMessage" xml:space="preserve">
     <value>Übersichtsdatei aller Spiele generieren</value>

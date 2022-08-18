@@ -129,6 +129,9 @@
   <data name="AskForPerformCurrentTurnMessage" xml:space="preserve">
     <value>Giocatore {0}, inserisci il numero di riga e di colonna della cella che desideri occupare, separati da uno spazio.</value>
   </data>
+  <data name="BookedIdErrorMessage" xml:space="preserve">
+    <value>Questo ID è già stato preso. Riprova</value>
+  </data>
   <data name="CurrentTurnPlayerDeclarationMessage" xml:space="preserve">
     <value>Turno giocatore {0}</value>
   </data>

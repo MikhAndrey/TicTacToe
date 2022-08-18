@@ -129,6 +129,9 @@
   <data name="AskForPerformCurrentTurnMessage" xml:space="preserve">
     <value>Player {0}, enter the row number and column number of the cell you would like to occupy, separated by a space</value>
   </data>
+  <data name="BookedIdErrorMessage" xml:space="preserve">
+    <value>This ID is already taken. Try again</value>
+  </data>
   <data name="CurrentTurnPlayerDeclarationMessage" xml:space="preserve">
     <value>Player {0}'s turn</value>
   </data>

@@ -129,6 +129,9 @@
   <data name="AskForPerformCurrentTurnMessage" xml:space="preserve">
     <value>Spieler {0}, geben Sie die Zeilen- und Spaltennummer der Zelle ein, die Sie besetzen möchten, getrennt durch ein Leerzeichen.</value>
   </data>
+  <data name="BookedIdErrorMessage" xml:space="preserve">
+    <value>Diese ID ist bereits vergeben. versuchen Sie es nochmal</value>
+  </data>
   <data name="CurrentTurnPlayerDeclarationMessage" xml:space="preserve">
     <value>Spielerzug {0}</value>
   </data>

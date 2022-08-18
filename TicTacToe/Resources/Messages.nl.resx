@@ -129,6 +129,9 @@
   <data name="AskForPerformCurrentTurnMessage" xml:space="preserve">
     <value>Speler {0}, voer het rijnummer en kolomnummer in van de cel die je wilt bezetten, gescheiden door een spatie.</value>
   </data>
+  <data name="BookedIdErrorMessage" xml:space="preserve">
+    <value>Deze ID is al in gebruik. probeer het nog eens</value>
+  </data>
   <data name="CurrentTurnPlayerDeclarationMessage" xml:space="preserve">
     <value>Speler beurt {0}</value>
   </data>

@@ -132,11 +132,12 @@ namespace TicTacToe.GameControllers
         }
         private void SetUsersPersonalData()
         {
-            bool correctUserInput = false;
+            bool correctUserInput;
             string? possiblePlayerPersonalData;
             string playerName = "";
             int playerId = 0;
             int playerAge = 0;
+            List<int> bookedIds = new(); 
             for (int i = 0; i < _playersCount; i++)
             {
                 do
@@ -150,9 +151,13 @@ namespace TicTacToe.GameControllers
                         _maxAllowedAge,
                         ref playerId,
                         ref playerName,
-                        ref playerAge);
+                        ref playerAge,
+                        bookedIds);
                     if (correctUserInput)
+                    {
                         _players[i] = new(playerName, playerId, playerAge);
+                        bookedIds.Add(playerId);
+                    }
                 } while (!correctUserInput);
             }
         }

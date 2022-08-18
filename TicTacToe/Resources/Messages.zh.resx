@@ -129,6 +129,9 @@
   <data name="AskForPerformCurrentTurnMessage" xml:space="preserve">
     <value>玩家{0}，輸入您要佔用的單元格的行號和列號，用空格隔開。</value>
   </data>
+  <data name="BookedIdErrorMessage" xml:space="preserve">
+    <value>此 ID 已被佔用。 再試一次</value>
+  </data>
   <data name="CurrentTurnPlayerDeclarationMessage" xml:space="preserve">
     <value>玩家回合 {0}</value>
   </data>

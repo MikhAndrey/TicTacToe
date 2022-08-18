@@ -129,6 +129,9 @@
   <data name="AskForPerformCurrentTurnMessage" xml:space="preserve">
     <value>プレーヤー {0}、占有したいセルの行番号と列番号をスペースで区切って入力してください。</value>
   </data>
+  <data name="BookedIdErrorMessage" xml:space="preserve">
+    <value>この ID は既に使用されています。 再試行</value>
+  </data>
   <data name="CurrentTurnPlayerDeclarationMessage" xml:space="preserve">
     <value>プレーヤー ターン {0}</value>
   </data>

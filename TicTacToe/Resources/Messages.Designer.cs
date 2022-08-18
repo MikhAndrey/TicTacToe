@@ -97,6 +97,15 @@ namespace TicTacToe.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на This ID is already taken. Try again.
+        /// </summary>
+        public static string BookedIdErrorMessage {
+            get {
+                return ResourceManager.GetString("BookedIdErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Player {0}&apos;s turn.
         /// </summary>
         public static string CurrentTurnPlayerDeclarationMessage {

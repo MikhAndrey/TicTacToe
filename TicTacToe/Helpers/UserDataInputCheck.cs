@@ -10,12 +10,12 @@ namespace TicTacToe.Helpers
             int maxAge,
             ref int id,
             ref string name,
-            ref int age)
+            ref int age,
+            List<int> currentIds)
         {
             void ShowErrorMessage(string message, params object[] values)
             {
                 Console.WriteLine(message,values);
-                Console.ReadKey();
             }
 
             if (string.IsNullOrEmpty(inputString))
@@ -35,6 +35,12 @@ namespace TicTacToe.Helpers
             if (!isIdANumber)
             {
                 ShowErrorMessage(Messages.NonIntegerIdMessage);
+                return false;
+            }
+            bool idIsUnique = !currentIds.Contains(possibleId);
+            if (!idIsUnique)
+            {
+                ShowErrorMessage(Messages.BookedIdErrorMessage);
                 return false;
             }
             id = possibleId;

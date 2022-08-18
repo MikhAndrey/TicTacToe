@@ -4,7 +4,7 @@
         where T : class
     {
         List<T> GetList();
-        T GetItem(int id);
+        T? GetItem(int id);
         void Add(T item);
         void Update(T item);
         void Delete(int id);

@@ -70,7 +70,6 @@ namespace TicTacToe.GameControllers
                 for (int j = 0; j < _fieldSize; j++)
                     _gameFieldSymbols[i, j] = _fieldSymbol;
             SetUsersPersonalData();
-            SetUserSymbols();
             UpdatePlayersDB();
         }
         public void Play()
@@ -130,16 +129,11 @@ namespace TicTacToe.GameControllers
                         bookedIds);
                     if (correctUserInput)
                     {
-                        _players[i] = new(playerName, playerId, playerAge);
+                        _players[i] = new(_userSymbols[i], playerName, playerId, playerAge);
                         bookedIds.Add(playerId);
                     }
                 } while (!correctUserInput);
             }
-        }
-        private void SetUserSymbols()
-        {
-            for (int i = 0; i < _playersCount; i++)
-                _players[i].Symbol = _userSymbols[i];
         }
         private void UpdatePlayersDB()
         {

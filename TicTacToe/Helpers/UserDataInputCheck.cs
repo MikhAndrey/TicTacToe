@@ -1,4 +1,5 @@
 ﻿using TicTacToe.Resources;
+
 namespace TicTacToe.Helpers
 {
     public static class UserDataInputCheck

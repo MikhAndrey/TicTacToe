@@ -15,7 +15,7 @@
                 properValues[i] = (i + 1).ToString();
             input = input.Trim();
             int firstSpaceIndex = input.IndexOf(separator);
-            if (firstSpaceIndex < 0)
+            if (firstSpaceIndex == -1)
                 return false;
             int lastSpaceIndex = input.LastIndexOf(separator);
             string possibleStringRowNumber = input.Substring(0, firstSpaceIndex);

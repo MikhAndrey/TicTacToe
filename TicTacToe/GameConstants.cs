@@ -1,4 +1,5 @@
 ﻿namespace TicTacToe;
+
 public static class GameConstants
 {
     public const string TicTacToeSymbols = "xo";

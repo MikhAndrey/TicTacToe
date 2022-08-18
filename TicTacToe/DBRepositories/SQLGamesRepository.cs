@@ -1,6 +1,6 @@
 ﻿using TicTacToe.Interfaces;
 using TicTacToe.Contexts;
-using TicTacToe.GameControllers;
+using TicTacToe.DBEntities;
 namespace TicTacToe.DBRepositories
 {
     public class SQLGamesRepository : IRepository<GameDataForDB>

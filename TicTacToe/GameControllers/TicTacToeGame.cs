@@ -4,6 +4,8 @@ using TicTacToe.Interfaces;
 using TicTacToe.DBRepositories;
 using System.Text.Json;
 using TicTacToe.Resources;
+using TicTacToe.DBEntities;
+
 namespace TicTacToe.GameControllers
 {
     public class TicTacToeGame

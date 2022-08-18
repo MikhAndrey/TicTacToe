@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TicTacToe.Entities;
-using TicTacToe.GameControllers;
+using TicTacToe.DBEntities;
 
 namespace TicTacToe.Contexts
 {
@@ -14,7 +14,7 @@ namespace TicTacToe.Contexts
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=tictactoedb;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=andrewtictactoedb;Trusted_Connection=True;");
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -1,13 +1,12 @@
-﻿using TicTacToe.Interfaces;
-using TicTacToe.Contexts;
-using TicTacToe.DBEntities;
+﻿using TicTacToe.Repositories.Interfaces;
+using TicTacToe.Model.DBModels;
 
-namespace TicTacToe.DBRepositories
+namespace TicTacToe.Repositories
 {
-    public class SQLGamesRepository : IRepository<GameDataForDB>
+    public class GamesRepository : IRepository<GameDataForDB>
     {
         private ApplicationContext _db;
-        public SQLGamesRepository() => _db = new();
+        public GamesRepository() => _db = new();
         public List<GameDataForDB> GetList() => _db.Games.ToList();
         public GameDataForDB? GetItem(int id) => _db.Games.Find(id);
         public void Add(GameDataForDB game) => _db.Games.Add(game);

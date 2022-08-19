@@ -1,14 +1,10 @@
-﻿using TicTacToe.Entities;
-using TicTacToe.Helpers;
-using TicTacToe.Interfaces;
-using TicTacToe.DBRepositories;
-using System.Text.Json;
-using System.Text;
+﻿using TicTacToe.Helpers;
 using TicTacToe.Resources;
-using TicTacToe.DBEntities;
+using TicTacToe.Model.ViewModel;
+using TicTacToe.Services;
+using System.Globalization;
 
-namespace TicTacToe.GameControllers
-{
+namespace TicTacToe.Launchers { 
     public class TicTacToeGame
     {
         private Player[] _players;
@@ -31,23 +27,21 @@ namespace TicTacToe.GameControllers
         private int _maxAllowedAge;
         private DateTime _gameStartDate;
         private DateTime _gameEndDate;
-        private IRepository<Player> _playersDB;
-        private IRepository<GameDataForDB> _gamesDB;
-        private string[] _jsonGenerationCommands;
+        private string[] _languagesAbbreviations;
 
-        public TicTacToeGame(int playersCount = GameConstants.PlayersCount,
-            int fieldSize = GameConstants.GameFieldSize,
-            int maxNameLength = GameConstants.MaxAllowedNameLength,
-            int maxRetriesCount = GameConstants.MaxAllowedRetriesCount,
-            string symbols = GameConstants.TicTacToeSymbols,
-            char fieldSymbol = GameConstants.FieldSymbol,
-            char verticalSeparator = GameConstants.VerticalFieldSeparator,
-            char horizontalSeparator = GameConstants.HorizontalFieldSeparator,
-            char turnInputSeparator = GameConstants.UserTurnInputSeparator,
-            char userDataInputSeparator = GameConstants.UserDataInputSeparator,
-            int minAllowedAge = GameConstants.MinAllowedAge,
-            int maxAllowedAge = GameConstants.MaxAllowedAge,
-            string JSONGenerationCommands = GameConstants.JSONGenerationCommands)
+        public TicTacToeGame(int playersCount = Constants.Constants.PlayersCount,
+            int fieldSize = Constants.Constants.GameFieldSize,
+            int maxNameLength = Constants.Constants.MaxAllowedNameLength,
+            int maxRetriesCount = Constants.Constants.MaxAllowedRetriesCount,
+            string symbols = Constants.Constants.TicTacToeSymbols,
+            char fieldSymbol = Constants.Constants.FieldSymbol,
+            char verticalSeparator = Constants.Constants.VerticalFieldSeparator,
+            char horizontalSeparator = Constants.Constants.HorizontalFieldSeparator,
+            char turnInputSeparator = Constants.Constants.UserTurnInputSeparator,
+            char userDataInputSeparator = Constants.Constants.UserDataInputSeparator,
+            int minAllowedAge = Constants.Constants.MinAllowedAge,
+            int maxAllowedAge = Constants.Constants.MaxAllowedAge,
+            string languagesAbbreviations = Constants.Constants.SupportedLanguagesAbbreviations)
         {
             _gameStartDate = DateTime.Now;
             _playersCount = playersCount;
@@ -64,20 +58,42 @@ namespace TicTacToe.GameControllers
             _maxAllowedAge = maxAllowedAge;
             _players = new Player[_playersCount];
             _gameFieldSymbols = new char[_fieldSize, _fieldSize];
-            _playersDB = new SQLPlayersRepository();
-            _gamesDB = new SQLGamesRepository();
-            _jsonGenerationCommands = JSONGenerationCommands.Split(',');
+            _languagesAbbreviations = languagesAbbreviations.Split(',');
             for (int i = 0; i < _fieldSize; i++)
                 for (int j = 0; j < _fieldSize; j++)
                     _gameFieldSymbols[i, j] = _fieldSymbol;
+            SetUICulture();
             SetUsersPersonalData();
-            UpdatePlayersDB();
+            PlayersDBController.UpdatePlayersDB(_playersCount,_players); 
         }
         public void Play()
         {
             LaunchGame();
-            GenerateJSONReports();
+            JsonController.GenerateJsonReports(GamesDBController._gamesDB, _players);
             ConfirmGameRepeat();
+        }
+        private void SetUICulture()
+        {
+            string languagesNamesString = Messages.LanguagesNames;
+            string[] languagesNames = languagesNamesString.Split(' ');
+            int languagesCount = languagesNames.Length;
+            while (true)
+            {
+                Console.WriteLine(Messages.SelectLanguageMessage);
+                for (int i = 0; i < languagesCount; i++)
+                    Console.WriteLine($"{_languagesAbbreviations[i]} - {languagesNames[i]};");
+                string? userLanguage = Console.ReadLine();
+                if (!string.IsNullOrEmpty(userLanguage))
+                {
+                    userLanguage = userLanguage.Trim();
+                    if (Array.IndexOf(_languagesAbbreviations, userLanguage.ToLower()) != -1)
+                    {
+                        CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo(userLanguage);
+                        return;
+                    }
+                }
+                Console.WriteLine("\n" + Messages.SelectLanguageRetryMessage + "\n");
+            }
         }
         private void LaunchGame()
         {
@@ -86,7 +102,7 @@ namespace TicTacToe.GameControllers
                 _gameEndDate = DateTime.Now;
                 DrawGameField();
                 Console.WriteLine(message, winnerName);
-                UpdateGamesDB(winnerId);
+                GamesDBController.UpdateGamesDB(_gameStartDate, _gameEndDate, _userSymbols, _players, winnerId);
             }
             while (_successfulTurnsCount < _fieldSize * _fieldSize)
             {
@@ -129,30 +145,6 @@ namespace TicTacToe.GameControllers
                 _players[i] = new(_userSymbols[i], playerName, playerId, playerAge);
                 bookedIds.Add(playerId);
             }
-        }
-        private void UpdatePlayersDB()
-        {
-            for (int i = 0; i < _playersCount; i++)
-            {
-                Player? possiblePlayerFromDB = _playersDB.GetItem(_players[i].Id);
-                if (possiblePlayerFromDB == null)
-                    _playersDB.Add(_players[i]);
-                else
-                {
-                    if (possiblePlayerFromDB.Name != _players[i].Name)
-                        possiblePlayerFromDB.Name = _players[i].Name;
-                    if (possiblePlayerFromDB.Age != _players[i].Age)
-                        possiblePlayerFromDB.Age = _players[i].Age;
-                }
-                _playersDB.Save();
-            }
-        }
-        private void UpdateGamesDB(int? winnerId)
-        {
-            GameDataForDB thisGameData;
-            thisGameData = new(_gameStartDate, _gameEndDate, _userSymbols[0], _userSymbols[1], _players[0].Id, _players[1].Id, winnerId);
-            _gamesDB.Add(thisGameData);
-            _gamesDB.Save();
         }
         private void WriteUserNumberForTurn()
         {
@@ -251,87 +243,6 @@ namespace TicTacToe.GameControllers
                         return true;
                 }
             return false;
-        }
-        private async void GenerateJSONReports()
-        {
-            List<GameDataForDB> gamesList = _gamesDB.GetList();
-            int gamesCount = gamesList.Count();
-            string fileName;
-            string jsonData;
-            while (true)
-            {
-                Console.WriteLine(Messages.AskForEnterCommandMessage +
-                    $"\n{_jsonGenerationCommands[0]}:" + Messages.FirstCommandMessage +
-                    $"\n{_jsonGenerationCommands[1]}:" + Messages.SecondCommandMessage +
-                    $"\n{_jsonGenerationCommands[2]}:" + Messages.ThirdCommandMessage +
-                    $"\n{_jsonGenerationCommands[3]}:" + Messages.FourthCommandMessage);
-                string? userGenerationCommand = Console.ReadLine();
-                int userGenerationCommandIndex = Array.IndexOf(_jsonGenerationCommands, userGenerationCommand);
-                switch (userGenerationCommandIndex)
-                {
-                    case 0:
-                        fileName = "lastgameresult.json";
-                        try
-                        {
-                            FileStream lastGameFile = new FileStream(fileName, FileMode.Truncate);
-                            jsonData = JsonSerializer.Serialize(gamesList[gamesCount - 1])+"\n";
-                            lastGameFile.Write(Encoding.Default.GetBytes(jsonData));
-                            lastGameFile.Close();
-                            Console.WriteLine("\n" + Messages.LastGameSaveMessage + "\n", fileName);
-                        }
-                        catch
-                        {
-                            Console.WriteLine("\n" + Messages.SaveToFileErrorMessage + "\n");
-                        }
-                        break;
-                    case 1:
-                        try
-                        {
-                            fileName = "currentplayersgamesresults.json";
-                            FileStream currentPlayersGamesFile = new FileStream(fileName, FileMode.Truncate);
-                            foreach (GameDataForDB game in gamesList)
-                            {
-                                bool isTheGameOfRequiredTwoPlayers = game.FirstPlayerId == _players[0].Id && game.SecondPlayerId == _players[1].Id;
-                                bool isTheGameOfRequiredTwoPlayersReverse = game.FirstPlayerId == _players[1].Id && game.SecondPlayerId == _players[0].Id;
-                                if (isTheGameOfRequiredTwoPlayers || isTheGameOfRequiredTwoPlayersReverse)
-                                {
-                                    jsonData = JsonSerializer.Serialize(game) + "\n";
-                                    currentPlayersGamesFile.Write(Encoding.Default.GetBytes(jsonData));
-                                }
-                            }
-                            currentPlayersGamesFile.Close();
-                            Console.WriteLine("\n" + Messages.GamesWithCurrentPlayersSaveMessage + "\n", fileName);
-                        }
-                        catch
-                        {
-                            Console.WriteLine("\n" + Messages.SaveToFileErrorMessage + "\n");
-                        }
-                        break;
-                    case 2:
-                        try
-                        {
-                            fileName = "allgamesresults.json";
-                            FileStream allGamesFile = new FileStream(fileName, FileMode.Truncate);
-                            foreach (GameDataForDB game in gamesList)
-                            {
-                                jsonData = JsonSerializer.Serialize(game) + "\n";
-                                allGamesFile.Write(Encoding.Default.GetBytes(jsonData));
-                            }
-                            allGamesFile.Close();
-                            Console.WriteLine("\n" + Messages.AllGamesSaveMessage + "\n", fileName);
-                        }
-                        catch
-                        {
-                            Console.WriteLine("\n" + Messages.SaveToFileErrorMessage + "\n");
-                        }
-                        break;
-                    case 3:
-                        return;
-                    default:
-                        Console.WriteLine(Messages.WrongCommandMessage);
-                        break;
-                }
-            }
         }
         private void ConfirmGameRepeat()
         {

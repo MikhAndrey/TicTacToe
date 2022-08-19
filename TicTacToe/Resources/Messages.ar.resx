@@ -142,7 +142,13 @@
     <value>إنشاء ملف مراجعة لأحدث لعبة</value>
   </data>
   <data name="FourthCommandMessage" xml:space="preserve">
-    <value>اذهب إلى نهاية اللعبة / ابدأ لعبة جديدة</value>
+    <value>اذهب إلى الاختيار بين إنهاء اللعبة وبدء لعبة جديدة</value>
+  </data>
+  <data name="GameGetConnectionErrorMessage" xml:space="preserve">
+    <value>حدث خطأ أثناء الاتصال بقاعدة البيانات. تعذر الحصول على بيانات اللعبة</value>
+  </data>
+  <data name="GameSetConnectionErrorMessage" xml:space="preserve">
+    <value>حدث خطأ أثناء الاتصال بقاعدة البيانات. غير قادر على كتابة بيانات اللعبة</value>
   </data>
   <data name="GamesWithCurrentPlayersSaveMessage" xml:space="preserve">
     <value>يتم حفظ المعلومات حول جميع الألعاب بين اللاعبين الحاليين في ملف {0}</value>
@@ -158,6 +164,9 @@
   </data>
   <data name="NonIntegerIdMessage" xml:space="preserve">
     <value>يجب أن يكون المعرف الخاص بك عددًا صحيحًا. حاول مرة اخرى</value>
+  </data>
+  <data name="PlayerConnectionErrorMessage" xml:space="preserve">
+    <value>حدث خطأ أثناء الاتصال بقاعدة البيانات. غير قادر على كتابة بيانات اللاعب</value>
   </data>
   <data name="RepeatConfirmMessage" xml:space="preserve">
     <value>هل تريد اللعب مرة أخرى؟ (أدخل - نعم ، أي مفتاح آخر - لا)</value>

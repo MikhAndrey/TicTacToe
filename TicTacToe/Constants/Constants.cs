@@ -1,6 +1,6 @@
-﻿namespace TicTacToe;
+﻿namespace TicTacToe.Constants;
 
-public static class GameConstants
+public static class Constants
 {
     public const string TicTacToeSymbols = "xo";
     public const int GameFieldSize = 3;

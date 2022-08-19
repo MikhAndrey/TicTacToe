@@ -133,11 +133,29 @@ namespace TicTacToe.Resources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на go to end game/start new game.
+        ///   Ищет локализованную строку, похожую на go to the choice between ending the game and starting a new game.
         /// </summary>
         public static string FourthCommandMessage {
             get {
                 return ResourceManager.GetString("FourthCommandMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на An error occurred while connecting to the database. Unable to get game data.
+        /// </summary>
+        public static string GameGetConnectionErrorMessage {
+            get {
+                return ResourceManager.GetString("GameGetConnectionErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на An error occurred while connecting to the database. Unable to write game data.
+        /// </summary>
+        public static string GameSetConnectionErrorMessage {
+            get {
+                return ResourceManager.GetString("GameSetConnectionErrorMessage", resourceCulture);
             }
         }
         
@@ -183,6 +201,15 @@ namespace TicTacToe.Resources {
         public static string NonIntegerIdMessage {
             get {
                 return ResourceManager.GetString("NonIntegerIdMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на An error occurred while connecting to the database. Unable to write player data.
+        /// </summary>
+        public static string PlayerConnectionErrorMessage {
+            get {
+                return ResourceManager.GetString("PlayerConnectionErrorMessage", resourceCulture);
             }
         }
         

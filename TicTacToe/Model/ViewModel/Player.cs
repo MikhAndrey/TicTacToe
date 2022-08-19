@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace TicTacToe.Entities
+namespace TicTacToe.Model.ViewModel
 {
     public class Player
     {

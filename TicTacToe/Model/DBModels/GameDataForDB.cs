@@ -1,4 +1,4 @@
-﻿namespace TicTacToe.DBEntities
+﻿namespace TicTacToe.Model.DBModels
 {
     public class GameDataForDB
     {

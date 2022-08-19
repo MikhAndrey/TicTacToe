@@ -142,7 +142,10 @@
     <value>生成最新遊戲的評論文件</value>
   </data>
   <data name="FourthCommandMessage" xml:space="preserve">
-    <value>結束遊戲/開始新遊戲</value>
+    <value>在結束遊戲和開始新遊戲之間進行選擇</value>
+  </data>
+  <data name="GameGetConnectionErrorMessage" xml:space="preserve">
+    <value>連接數據庫時出錯。 無法獲取遊戲數據</value>
   </data>
   <data name="GamesWithCurrentPlayersSaveMessage" xml:space="preserve">
     <value>當前玩家之間所有遊戲的信息保存到文件 {0}</value>
@@ -158,6 +161,9 @@
   </data>
   <data name="NonIntegerIdMessage" xml:space="preserve">
     <value>您的 id 必須是整數。請再試一次</value>
+  </data>
+  <data name="PlayerConnectionErrorMessage" xml:space="preserve">
+    <value>連接數據庫時出錯。 無法寫入玩家數據</value>
   </data>
   <data name="RepeatConfirmMessage" xml:space="preserve">
     <value>你想再玩一次嗎？ （輸入 - 是，任何其他鍵 - 否）</value>

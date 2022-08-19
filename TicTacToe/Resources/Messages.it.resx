@@ -142,7 +142,13 @@
     <value>generare un file di revisione dell'ultimo gioco</value>
   </data>
   <data name="FourthCommandMessage" xml:space="preserve">
-    <value>vai a fine partita/inizia nuova partita</value>
+    <value>vai alla scelta tra terminare il gioco e iniziare un nuovo gioco</value>
+  </data>
+  <data name="GameGetConnectionErrorMessage" xml:space="preserve">
+    <value>Si è verificato un errore durante la connessione al database. Impossibile ottenere i dati di gioco</value>
+  </data>
+  <data name="GameSetConnectionErrorMessage" xml:space="preserve">
+    <value>Si è verificato un errore durante la connessione al database. Impossibile scrivere i dati di gioco</value>
   </data>
   <data name="GamesWithCurrentPlayersSaveMessage" xml:space="preserve">
     <value>Le informazioni su tutte le partite tra giocatori attuali vengono salvate nel file {0}</value>
@@ -158,6 +164,9 @@
   </data>
   <data name="NonIntegerIdMessage" xml:space="preserve">
     <value>Il tuo ID deve essere un numero intero. Per favore riprova</value>
+  </data>
+  <data name="PlayerConnectionErrorMessage" xml:space="preserve">
+    <value>Si è verificato un errore durante la connessione al database. Impossibile scrivere i dati del giocatore</value>
   </data>
   <data name="RepeatConfirmMessage" xml:space="preserve">
     <value>Vuoi giocare di nuovo? (Invio - sì, qualsiasi altra chiave - no)</value>

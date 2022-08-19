@@ -26,8 +26,21 @@ namespace TicTacToe.Helpers
             }
             inputString = inputString.Trim();
             int firstSeparatorIndex = inputString.IndexOf(separator);
+            if (firstSeparatorIndex == -1)
+            {
+                ShowErrorMessage(Messages.WrongInputFormatMessage);
+                return false;
+            }
             int lastSeparatorIndex = inputString.LastIndexOf(separator);
-            if (firstSeparatorIndex == -1 || lastSeparatorIndex == -1 || firstSeparatorIndex == lastSeparatorIndex)
+            if (firstSeparatorIndex == lastSeparatorIndex)
+            {
+                ShowErrorMessage(Messages.WrongInputFormatMessage);
+                return false;
+            }
+            string possiblePlayerName = inputString.Substring(firstSeparatorIndex + 1, lastSeparatorIndex - 1 - firstSeparatorIndex);
+            possiblePlayerName = possiblePlayerName.Trim();
+            int firstSeparatorIndexBetweenIdAndAge = possiblePlayerName.IndexOf(separator);
+            if (firstSeparatorIndexBetweenIdAndAge != -1)
             {
                 ShowErrorMessage(Messages.WrongInputFormatMessage);
                 return false;
@@ -59,7 +72,6 @@ namespace TicTacToe.Helpers
                 return false;
             }
             age = possibleAge;
-            string possiblePlayerName = inputString.Substring(firstSeparatorIndex + 1, lastSeparatorIndex - firstSeparatorIndex - 1);
             bool isNameProper = !string.IsNullOrEmpty(possiblePlayerName) && possiblePlayerName.Length <= maxNameLength;
             if (!isNameProper)
             {

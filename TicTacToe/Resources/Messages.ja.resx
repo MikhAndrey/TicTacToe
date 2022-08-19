@@ -142,7 +142,13 @@
     <value>最新ゲームのレビューファイルを生成する</value>
   </data>
   <data name="FourthCommandMessage" xml:space="preserve">
-    <value>ゲームを終了する/新しいゲームを開始する</value>
+    <value>ゲームを終了するか、新しいゲームを開始するかの選択に進みます</value>
+  </data>
+  <data name="GameGetConnectionErrorMessage" xml:space="preserve">
+    <value>データベースへの接続中にエラーが発生しました。 ゲームデータを取得できません</value>
+  </data>
+  <data name="GameSetConnectionErrorMessage" xml:space="preserve">
+    <value>データベースへの接続中にエラーが発生しました。 ゲームデータを書き込めません</value>
   </data>
   <data name="GamesWithCurrentPlayersSaveMessage" xml:space="preserve">
     <value>現在のプレーヤー間のすべてのゲームに関する情報は、ファイル {0} に保存されます</value>
@@ -158,6 +164,9 @@
   </data>
   <data name="NonIntegerIdMessage" xml:space="preserve">
     <value>ID は整数でなければなりません。もう一度お試しください</value>
+  </data>
+  <data name="PlayerConnectionErrorMessage" xml:space="preserve">
+    <value>データベースへの接続中にエラーが発生しました。 プレイヤーデータを書き込めません</value>
   </data>
   <data name="RepeatConfirmMessage" xml:space="preserve">
     <value>また遊びたいですか？ (Enter - はい、その他のキー - いいえ)</value>

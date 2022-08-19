@@ -142,7 +142,13 @@
     <value>generate file with last game's review</value>
   </data>
   <data name="FourthCommandMessage" xml:space="preserve">
-    <value>go to end game/start new game</value>
+    <value>go to the choice between ending the game and starting a new game</value>
+  </data>
+  <data name="GameGetConnectionErrorMessage" xml:space="preserve">
+    <value>An error occurred while connecting to the database. Unable to get game data</value>
+  </data>
+  <data name="GameSetConnectionErrorMessage" xml:space="preserve">
+    <value>An error occurred while connecting to the database. Unable to write game data</value>
   </data>
   <data name="GamesWithCurrentPlayersSaveMessage" xml:space="preserve">
     <value>Information about all games between current players is saved to file {0}</value>
@@ -158,6 +164,9 @@
   </data>
   <data name="NonIntegerIdMessage" xml:space="preserve">
     <value>Your id must be an integer. Please, try again</value>
+  </data>
+  <data name="PlayerConnectionErrorMessage" xml:space="preserve">
+    <value>An error occurred while connecting to the database. Unable to write player data</value>
   </data>
   <data name="RepeatConfirmMessage" xml:space="preserve">
     <value>Do you want to play again? (Enter - yes, any other key - no)</value>

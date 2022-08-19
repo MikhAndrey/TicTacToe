@@ -1,5 +1,4 @@
-﻿using TicTacToe.GameControllers;
-using TicTacToe.Helpers;
+﻿using TicTacToe.Launchers;
 
 namespace TicTacToe
 {
@@ -7,7 +6,6 @@ namespace TicTacToe
     {
         static void Main(string[] args)
         {
-            UICultureSettings.SetUICulture();
             while (true)
             {
                 TicTacToeGame myGame = new();

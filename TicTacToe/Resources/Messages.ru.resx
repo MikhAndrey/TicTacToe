@@ -142,7 +142,10 @@
     <value>сгенерировать файл с обзором последней игры</value>
   </data>
   <data name="FourthCommandMessage" xml:space="preserve">
-    <value>перейти к завершению игры/началу новой игры</value>
+    <value>перейти к выбору между завершением игры и началом новой игры</value>
+  </data>
+  <data name="GameGetConnectionErrorMessage" xml:space="preserve">
+    <value>Произошла ошибка при подключении к базе данных. Невозможно получить данные об играх</value>
   </data>
   <data name="GamesWithCurrentPlayersSaveMessage" xml:space="preserve">
     <value>Информация обо всех играх между текущими игроками сохранена в файл {0}</value>
@@ -158,6 +161,9 @@
   </data>
   <data name="NonIntegerIdMessage" xml:space="preserve">
     <value>Ваш идентификатор должен быть целым числом. Пожалуйста, попробуйте еще раз</value>
+  </data>
+  <data name="PlayerConnectionErrorMessage" xml:space="preserve">
+    <value>Произошла ошибка при подключении к базе данных. Невозможно записать данные игроков</value>
   </data>
   <data name="RepeatConfirmMessage" xml:space="preserve">
     <value>Вы хотите играть снова? (Enter - да, любая другая клавиша - нет)</value>

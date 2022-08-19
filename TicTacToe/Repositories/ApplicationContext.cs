@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TicTacToe.Entities;
-using TicTacToe.DBEntities;
+using TicTacToe.Model.ViewModel;
+using TicTacToe.Model.DBModels;
+using System.Configuration;
 
-namespace TicTacToe.Contexts
+namespace TicTacToe.Repositories
 {
     public class ApplicationContext : DbContext
     {
@@ -11,7 +12,7 @@ namespace TicTacToe.Contexts
         public ApplicationContext() => Database.EnsureCreated();
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=andrewtictactoedb;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer(ConfigurationManager.ConnectionStrings["DefaultConnectionString"].ConnectionString);
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

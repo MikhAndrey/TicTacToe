@@ -142,7 +142,13 @@
     <value>Generieren Sie eine Überprüfungsdatei des neuesten Spiels</value>
   </data>
   <data name="FourthCommandMessage" xml:space="preserve">
-    <value>Spiel beenden/neues Spiel starten</value>
+    <value>Gehen Sie zur Wahl zwischen dem Beenden des Spiels und dem Starten eines neuen Spiels</value>
+  </data>
+  <data name="GameGetConnectionErrorMessage" xml:space="preserve">
+    <value>Beim Verbinden mit der Datenbank ist ein Fehler aufgetreten. Spieldaten können nicht abgerufen werden</value>
+  </data>
+  <data name="GameSetConnectionErrorMessage" xml:space="preserve">
+    <value>Beim Verbinden mit der Datenbank ist ein Fehler aufgetreten. Spieldaten können nicht geschrieben werden</value>
   </data>
   <data name="GamesWithCurrentPlayersSaveMessage" xml:space="preserve">
     <value>Informationen über alle Spiele zwischen aktuellen Spielern werden in Datei {0} gespeichert.</value>
@@ -158,6 +164,9 @@
   </data>
   <data name="NonIntegerIdMessage" xml:space="preserve">
     <value>Ihre ID muss eine Ganzzahl sein. Bitte versuche es erneut</value>
+  </data>
+  <data name="PlayerConnectionErrorMessage" xml:space="preserve">
+    <value>Beim Verbinden mit der Datenbank ist ein Fehler aufgetreten. Spielerdaten können nicht geschrieben werden</value>
   </data>
   <data name="RepeatConfirmMessage" xml:space="preserve">
     <value>Willst du wieder spielen? (Eingabe - ja, jede andere Taste - nein)</value>

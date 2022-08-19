@@ -12,7 +12,8 @@ namespace TicTacToe.Repositories
         public ApplicationContext() => Database.EnsureCreated();
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(ConfigurationManager.ConnectionStrings["DefaultConnectionString"].ConnectionString);
+            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnectionString"].ConnectionString; 
+            optionsBuilder.UseSqlServer(connectionString);
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

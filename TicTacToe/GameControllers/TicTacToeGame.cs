@@ -3,6 +3,7 @@ using TicTacToe.Helpers;
 using TicTacToe.Interfaces;
 using TicTacToe.DBRepositories;
 using System.Text.Json;
+using System.Text;
 using TicTacToe.Resources;
 using TicTacToe.DBEntities;
 
@@ -80,15 +81,12 @@ namespace TicTacToe.GameControllers
         }
         private void LaunchGame()
         {
-            GameDataForDB thisGameData;
             void FinishCurrentGame(string message, string? winnerName, int? winnerId)
             {
                 _gameEndDate = DateTime.Now;
                 DrawGameField();
                 Console.WriteLine(message, winnerName);
-                thisGameData = new(_gameStartDate, _gameEndDate, _userSymbols[0], _userSymbols[1], _players[0].Id, _players[1].Id, winnerId);
-                _gamesDB.Add(thisGameData);
-                _gamesDB.Save();
+                UpdateGamesDB(winnerId);
             }
             while (_successfulTurnsCount < _fieldSize * _fieldSize)
             {
@@ -127,28 +125,34 @@ namespace TicTacToe.GameControllers
                         ref playerName,
                         ref playerAge,
                         bookedIds);
-                    if (correctUserInput)
-                    {
-                        _players[i] = new(_userSymbols[i], playerName, playerId, playerAge);
-                        bookedIds.Add(playerId);
-                    }
                 } while (!correctUserInput);
+                _players[i] = new(_userSymbols[i], playerName, playerId, playerAge);
+                bookedIds.Add(playerId);
             }
         }
         private void UpdatePlayersDB()
         {
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < _playersCount; i++)
             {
                 Player? possiblePlayerFromDB = _playersDB.GetItem(_players[i].Id);
                 if (possiblePlayerFromDB == null)
                     _playersDB.Add(_players[i]);
                 else
                 {
-                    possiblePlayerFromDB.Name = _players[i].Name;
-                    possiblePlayerFromDB.Age = _players[i].Age;
+                    if (possiblePlayerFromDB.Name != _players[i].Name)
+                        possiblePlayerFromDB.Name = _players[i].Name;
+                    if (possiblePlayerFromDB.Age != _players[i].Age)
+                        possiblePlayerFromDB.Age = _players[i].Age;
                 }
                 _playersDB.Save();
             }
+        }
+        private void UpdateGamesDB(int? winnerId)
+        {
+            GameDataForDB thisGameData;
+            thisGameData = new(_gameStartDate, _gameEndDate, _userSymbols[0], _userSymbols[1], _players[0].Id, _players[1].Id, winnerId);
+            _gamesDB.Add(thisGameData);
+            _gamesDB.Save();
         }
         private void WriteUserNumberForTurn()
         {
@@ -253,6 +257,7 @@ namespace TicTacToe.GameControllers
             List<GameDataForDB> gamesList = _gamesDB.GetList();
             int gamesCount = gamesList.Count();
             string fileName;
+            string jsonData;
             while (true)
             {
                 Console.WriteLine(Messages.AskForEnterCommandMessage +
@@ -268,9 +273,9 @@ namespace TicTacToe.GameControllers
                         fileName = "lastgameresult.json";
                         try
                         {
-                            FileStream lastGameFile = new FileStream(fileName, FileMode.OpenOrCreate);
-                            lastGameFile.SetLength(0);
-                            await JsonSerializer.SerializeAsync<GameDataForDB>(lastGameFile, gamesList[gamesCount - 1]);
+                            FileStream lastGameFile = new FileStream(fileName, FileMode.Truncate);
+                            jsonData = JsonSerializer.Serialize(gamesList[gamesCount - 1])+"\n";
+                            lastGameFile.Write(Encoding.Default.GetBytes(jsonData));
                             lastGameFile.Close();
                             Console.WriteLine("\n" + Messages.LastGameSaveMessage + "\n", fileName);
                         }
@@ -283,14 +288,16 @@ namespace TicTacToe.GameControllers
                         try
                         {
                             fileName = "currentplayersgamesresults.json";
-                            FileStream currentPlayersGamesFile = new FileStream(fileName, FileMode.OpenOrCreate);
-                            currentPlayersGamesFile.SetLength(0);
+                            FileStream currentPlayersGamesFile = new FileStream(fileName, FileMode.Truncate);
                             foreach (GameDataForDB game in gamesList)
                             {
                                 bool isTheGameOfRequiredTwoPlayers = game.FirstPlayerId == _players[0].Id && game.SecondPlayerId == _players[1].Id;
                                 bool isTheGameOfRequiredTwoPlayersReverse = game.FirstPlayerId == _players[1].Id && game.SecondPlayerId == _players[0].Id;
                                 if (isTheGameOfRequiredTwoPlayers || isTheGameOfRequiredTwoPlayersReverse)
-                                    await JsonSerializer.SerializeAsync<GameDataForDB>(currentPlayersGamesFile, game);
+                                {
+                                    jsonData = JsonSerializer.Serialize(game) + "\n";
+                                    currentPlayersGamesFile.Write(Encoding.Default.GetBytes(jsonData));
+                                }
                             }
                             currentPlayersGamesFile.Close();
                             Console.WriteLine("\n" + Messages.GamesWithCurrentPlayersSaveMessage + "\n", fileName);
@@ -304,11 +311,11 @@ namespace TicTacToe.GameControllers
                         try
                         {
                             fileName = "allgamesresults.json";
-                            FileStream allGamesFile = new FileStream(fileName, FileMode.OpenOrCreate);
-                            allGamesFile.SetLength(0);
+                            FileStream allGamesFile = new FileStream(fileName, FileMode.Truncate);
                             foreach (GameDataForDB game in gamesList)
                             {
-                                await JsonSerializer.SerializeAsync<GameDataForDB>(allGamesFile, game);
+                                jsonData = JsonSerializer.Serialize(game) + "\n";
+                                allGamesFile.Write(Encoding.Default.GetBytes(jsonData));
                             }
                             allGamesFile.Close();
                             Console.WriteLine("\n" + Messages.AllGamesSaveMessage + "\n", fileName);

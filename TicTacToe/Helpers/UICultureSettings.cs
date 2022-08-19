@@ -5,10 +5,10 @@ namespace TicTacToe.Helpers
 {
     public static class UICultureSettings
     {
-        public static void SetUICulture(string languagesNamesString = GameConstants.SupportedLanguagesNames,
-            string languagesAbbreviationsString = GameConstants.SupportedLanguagesAbbreviations)
+        public static void SetUICulture(string languagesAbbreviationsString = GameConstants.SupportedLanguagesAbbreviations)
         {
-            string[] languagesNames = languagesNamesString.Split(',');
+            string languagesNamesString = Messages.LanguagesNames;
+            string[] languagesNames = languagesNamesString.Split(' ');
             string[] languagesAbbreviations = languagesAbbreviationsString.Split(',');
             int languagesCount = languagesNames.Length;
             while (true)
@@ -17,10 +17,14 @@ namespace TicTacToe.Helpers
                 for (int i = 0; i < languagesCount; i++)
                     Console.WriteLine($"{languagesAbbreviations[i]} - {languagesNames[i]};");
                 string? userLanguage = Console.ReadLine();
-                if (!string.IsNullOrEmpty(userLanguage) && Array.IndexOf(languagesAbbreviations, userLanguage) != -1)
+                if (!string.IsNullOrEmpty(userLanguage))
                 {
-                    CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo(userLanguage);
-                    return;
+                    userLanguage = userLanguage.Trim();
+                    if (Array.IndexOf(languagesAbbreviations, userLanguage.ToLower()) != -1)
+                    {
+                        CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo(userLanguage);
+                        return;
+                    }
                 }
                 Console.WriteLine("\n" + Messages.SelectLanguageRetryMessage + "\n");
             }

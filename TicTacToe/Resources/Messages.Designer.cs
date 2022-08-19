@@ -151,6 +151,15 @@ namespace TicTacToe.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Russian English French German Spanish Italian Dutch Portuguese Arabic Chinese Japanese.
+        /// </summary>
+        public static string LanguagesNames {
+            get {
+                return ResourceManager.GetString("LanguagesNames", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Information about the last game was successfully saved to the file {0}.
         /// </summary>
         public static string LastGameSaveMessage {

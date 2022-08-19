@@ -147,6 +147,9 @@
   <data name="GamesWithCurrentPlayersSaveMessage" xml:space="preserve">
     <value>當前玩家之間所有遊戲的信息保存到文件 {0}</value>
   </data>
+  <data name="LanguagesNames" xml:space="preserve">
+    <value>俄語 英語 法語 德語 西班牙語 意大利語 荷蘭語 葡萄牙語 阿拉伯語 中文 日語</value>
+  </data>
   <data name="LastGameSaveMessage" xml:space="preserve">
     <value>有關上一場比賽的信息已成功保存到文件 {0}</value>
   </data>

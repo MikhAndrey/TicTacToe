@@ -147,6 +147,9 @@
   <data name="GamesWithCurrentPlayersSaveMessage" xml:space="preserve">
     <value>يتم حفظ المعلومات حول جميع الألعاب بين اللاعبين الحاليين في ملف {0}</value>
   </data>
+  <data name="LanguagesNames" xml:space="preserve">
+    <value>الروسية الإنجليزية الفرنسية الألمانية الإسبانية الإيطالية الهولندية البرتغالية العربية الصينية اليابانية</value>
+  </data>
   <data name="LastGameSaveMessage" xml:space="preserve">
     <value>معلومات حول جميع الألعاب المحفوظةتم حفظ المعلومات الخاصة باللعبة الأخيرة بنجاح في الملف {0}</value>
   </data>

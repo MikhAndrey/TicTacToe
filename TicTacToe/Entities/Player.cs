@@ -19,5 +19,11 @@ namespace TicTacToe.Entities
             Id = id;
             Age = age;
         }
+        public Player(string name, int id, int age)
+        {
+            Name = name;
+            Id = id;
+            Age = age;
+        }
     }
 }

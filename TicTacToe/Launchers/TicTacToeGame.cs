@@ -64,12 +64,12 @@ namespace TicTacToe.Launchers {
                     _gameFieldSymbols[i, j] = _fieldSymbol;
             SetUICulture();
             SetUsersPersonalData();
-            PlayersDBController.UpdatePlayersDB(_playersCount,_players); 
+            PlayersDBService.UpdatePlayersDB(_playersCount,_players); 
         }
         public void Play()
         {
             LaunchGame();
-            JsonController.GenerateJsonReports(GamesDBController._gamesDB, _players);
+            JsonService.GenerateJsonReports(GamesDBService._gamesDB, _players);
             ConfirmGameRepeat();
         }
         private void SetUICulture()
@@ -102,7 +102,7 @@ namespace TicTacToe.Launchers {
                 _gameEndDate = DateTime.Now;
                 DrawGameField();
                 Console.WriteLine(message, winnerName);
-                GamesDBController.UpdateGamesDB(_gameStartDate, _gameEndDate, _userSymbols, _players, winnerId);
+                GamesDBService.UpdateGamesDB(_gameStartDate, _gameEndDate, _userSymbols, _players, winnerId);
             }
             while (_successfulTurnsCount < _fieldSize * _fieldSize)
             {

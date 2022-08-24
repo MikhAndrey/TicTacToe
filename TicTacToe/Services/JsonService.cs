@@ -6,132 +6,172 @@ using System.Text.Json;
 using System.Text;
 
 namespace TicTacToe.Services {
+
     /// <summary>
     ///   This service implements the generation of JSON files based on the command entered by the user 
     ///   and the selection of game information corresponding to this command from the database.
     /// </summary>
     public static class JsonService
     {
-        /// <summary>The json commands. By default we take them from constants</summary>
-        private static string[] _jsonCommands = Constants.Constants.JSONGenerationCommands.Split(',');
-        /// <summary>Generates the json reports.</summary>
-        /// <param name="gamesDB">Current games database.</param>
-        /// <param name="players">Players for current game. We need their data to select proper games from database</param>
-        public static void GenerateJsonReports(IRepository<GameDataForDB> gamesDB, Player[] players)
+        /// <summary>
+        /// JSON files names.
+        /// </summary>
+        private static string[] _fileNames = Constants.Constants.JSONFilesNames.Split(Constants.Constants.FileNamesSeparator);
+
+        /// <summary>
+        /// The adjacent records in file separator
+        /// </summary>
+        private static string _adjacentRecordsSeparator = Constants.Constants.AdjacentJSONRecordsSeparator;
+
+        /// <summary>The user files directory path</summary>
+        private static string _userFilesDirectoryPath = Constants.Constants.UserFilesDirectoryPath;
+
+        private const string _filePathSeparator = "/";
+
+        /// <summary>
+        /// Generates the file with report of the current game.
+        /// </summary>
+        /// <param name="gamesDB">Еhe database where the data of the current game will be saved.</param>
+        /// <param name="reportGeneratingState">State of the report generating.
+        /// Describes whether the report was created successfully or some errrors occured.</param>
+        /// <param name="additionalParams">The supplementing parameters for reportGeneratingState.</param>
+        public static void GenerateCurrentGameReport(IRepository<GameDataForDB> gamesDB, 
+            out string reportGeneratingState, 
+            out object[]? additionalParams)
+        {
+            additionalParams = null;    
+            List<GameDataForDB> gamesList;
+            string jsonData;
+            string filePath;
+            int gamesCount;
+            try
+            {
+                gamesList = gamesDB.GetList();
+            }
+            catch
+            {
+                reportGeneratingState = Messages.GameGetConnectionErrorMessage;
+                return;
+            }
+            gamesCount = gamesList.Count();
+            try
+            {
+                if (!Directory.Exists(_userFilesDirectoryPath))
+                    Directory.CreateDirectory(_userFilesDirectoryPath);
+                filePath = _userFilesDirectoryPath + _filePathSeparator + _fileNames[0];
+                using (FileStream lastGameFile = new FileStream(filePath, FileMode.Create))
+                {
+                    jsonData = JsonSerializer.Serialize(gamesList[gamesCount - 1]) + _adjacentRecordsSeparator;
+                    lastGameFile.Write(Encoding.Default.GetBytes(jsonData));
+                    lastGameFile.Close();
+                }
+                reportGeneratingState = "\n" + Messages.LastGameSaveMessage + "\n";
+                additionalParams = new object[] { _fileNames[0] };
+            }
+            catch
+            {
+                reportGeneratingState = "\n" + Messages.SaveToFileErrorMessage + "\n";
+            }
+        }
+
+        /// <summary>
+        /// Generates file with report about all games in which current players took part.
+        /// </summary>
+        /// <param name="gamesDB">The database with game data.</param>
+        /// <param name="players">The current game players.</param>
+        /// <param name="reportGeneratingState">State of the report generating.
+        /// Describes whether the report was created successfully or some errrors occured.</param>
+        /// <param name="additionalParams">The supplementing parameters for reportGeneratingState.</param>
+        public static void GenerateCurrentPlayerGamesReport(IRepository<GameDataForDB> gamesDB, 
+            Player[] players,
+            out string reportGeneratingState,
+            out object[]? additionalParams)
         {
             List<GameDataForDB> gamesList;
-            string fileName;
             string jsonData;
-            while (true)
+            string filePath;
+            additionalParams = null;
+            try
             {
-                Console.WriteLine(Messages.AskForEnterCommandMessage +      //Write in console what options related to file generation are available
-                    $"\n{_jsonCommands[0]}:" + Messages.FirstCommandMessage +
-                    $"\n{_jsonCommands[1]}:" + Messages.SecondCommandMessage +
-                    $"\n{_jsonCommands[2]}:" + Messages.ThirdCommandMessage +
-                    $"\n{_jsonCommands[3]}:" + Messages.FourthCommandMessage);
-                string? userGenerationCommand = Console.ReadLine();
-                int userGenerationCommandIndex = Array.IndexOf(_jsonCommands, userGenerationCommand);       //Try to find user input among available commands
-                switch (userGenerationCommandIndex)
+                gamesList = gamesDB.GetList();
+            }
+            catch
+            {
+                reportGeneratingState = Messages.GameGetConnectionErrorMessage;
+                return;
+            }
+            try
+            {
+                if (!Directory.Exists(_userFilesDirectoryPath))
+                     Directory.CreateDirectory(_userFilesDirectoryPath);
+                filePath = _userFilesDirectoryPath + _filePathSeparator + _fileNames[1];
+                using (FileStream currentPlayersGamesFile = new FileStream(filePath, FileMode.Create))
                 {
-                    case 0:
-                        int gamesCount;
-                        try
+                    foreach (GameDataForDB game in gamesList)
+                    {
+                        bool isTheGameOfRequiredTwoPlayers = game.FirstPlayerId == players[0].Id && game.SecondPlayerId == players[1].Id;
+                        bool isTheGameOfRequiredTwoPlayersReverse = game.FirstPlayerId == players[1].Id && game.SecondPlayerId == players[0].Id;
+                        if (isTheGameOfRequiredTwoPlayers || isTheGameOfRequiredTwoPlayersReverse)
                         {
-                            gamesList = gamesDB.GetList();
+                            jsonData = JsonSerializer.Serialize(game) + _adjacentRecordsSeparator;
+                            currentPlayersGamesFile.Write(Encoding.Default.GetBytes(jsonData));
                         }
-                        catch
-                        {
-                            Console.WriteLine(Messages.GameGetConnectionErrorMessage);
-                            break;
-                        }
-                        gamesCount = gamesList.Count();
-                        try
-                        {
-                            fileName = "lastgameresult.json";
-                            using (FileStream lastGameFile = new FileStream(fileName, FileMode.Create))
-                            {
-                                jsonData = JsonSerializer.Serialize(gamesList[gamesCount - 1]) + "\n";      //Choose only the last game info to serialie
-                                lastGameFile.Write(Encoding.Default.GetBytes(jsonData));
-                                lastGameFile.Close();
-                            }
-                            Console.WriteLine("\n" + Messages.LastGameSaveMessage + "\n", fileName);
-                        }
-                        catch
-                        {
-                            Console.WriteLine("\n" + Messages.SaveToFileErrorMessage + "\n");
-                        }
-                        break;
-                    case 1:
-                        try
-                        {
-                            gamesList = gamesDB.GetList();
-                        }
-                        catch
-                        {
-                            Console.WriteLine(Messages.GameGetConnectionErrorMessage);
-                            break;
-                        }
-                        try
-                        {
-                            fileName = "currentplayersgamesresults.json";
-                            using (FileStream currentPlayersGamesFile = new FileStream(fileName, FileMode.Create))
-                            {
-                                currentPlayersGamesFile.SetLength(0);
-                                foreach (GameDataForDB game in gamesList)
-                                {
-                                    //Find out whether the player IDs were the same (probably in reverse order)
-                                    bool isTheGameOfRequiredTwoPlayers = game.FirstPlayerId == players[0].Id && game.SecondPlayerId == players[1].Id;
-                                    bool isTheGameOfRequiredTwoPlayersReverse = game.FirstPlayerId == players[1].Id && game.SecondPlayerId == players[0].Id;
-                                    if (isTheGameOfRequiredTwoPlayers || isTheGameOfRequiredTwoPlayersReverse)
-                                    {
-                                        jsonData = JsonSerializer.Serialize(game) + "\n";
-                                        currentPlayersGamesFile.Write(Encoding.Default.GetBytes(jsonData));
-                                    }
-                                }
-                                currentPlayersGamesFile.Close();
-                            }
-                            Console.WriteLine("\n" + Messages.GamesWithCurrentPlayersSaveMessage + "\n", fileName);
-                        }
-                        catch
-                        {
-                            Console.WriteLine("\n" + Messages.SaveToFileErrorMessage + "\n");
-                        }
-                        break;
-                    case 2:
-                        try
-                        {
-                            gamesList = gamesDB.GetList();
-                        }
-                        catch
-                        {
-                            Console.WriteLine(Messages.GameGetConnectionErrorMessage);
-                            break;
-                        }
-                        try
-                        {
-                            fileName = "allgamesresults.json";
-                            using (FileStream allGamesFile = new FileStream(fileName, FileMode.Create))
-                            {
-                                foreach (GameDataForDB game in gamesList)
-                                {
-                                    jsonData = JsonSerializer.Serialize(game) + "\n";       //Just save  every game result to file
-                                    allGamesFile.Write(Encoding.Default.GetBytes(jsonData));
-                                }
-                                allGamesFile.Close();
-                            }
-                            Console.WriteLine("\n" + Messages.AllGamesSaveMessage + "\n", fileName);
-                        }
-                        catch
-                        {
-                            Console.WriteLine("\n" + Messages.SaveToFileErrorMessage + "\n");
-                        }
-                        break;
-                    case 3:
-                        return;
-                    default:
-                        Console.WriteLine(Messages.WrongCommandMessage);
-                        break;
+                    }
+                    currentPlayersGamesFile.Close();
                 }
+                reportGeneratingState = "\n" + Messages.GamesWithCurrentPlayersSaveMessage + "\n"; 
+                additionalParams = new object[] { _fileNames[1] };
+            }
+            catch
+            {
+                reportGeneratingState = "\n" + Messages.SaveToFileErrorMessage + "\n";
+            }
+        }
+
+        /// <summary>
+        /// Generates file with report about all games.
+        /// </summary>
+        /// <param name="gamesDB">The database with games data.</param>
+        /// <param name="reportGeneratingState">State of the report generating.
+        /// Describes whether the report was created successfully or some errrors occured.</param>
+        /// <param name="additionalParams">The supplementing parameters for reportGeneratingState.</param>
+        public static void GenerateAllGamesReport(IRepository<GameDataForDB> gamesDB,
+            out string reportGeneratingState,
+            out object[]? additionalParams)
+        {
+            List<GameDataForDB> gamesList;
+            string jsonData;
+            string filePath;
+            additionalParams = null;
+            try
+            {
+                gamesList = gamesDB.GetList();
+            }
+            catch
+            {
+                reportGeneratingState = Messages.GameGetConnectionErrorMessage;
+                return;
+            }
+            try
+            {
+                if (!Directory.Exists(_userFilesDirectoryPath))
+                    Directory.CreateDirectory(_userFilesDirectoryPath);
+                filePath = _userFilesDirectoryPath + _filePathSeparator + _fileNames[2];
+                using (FileStream allGamesFile = new FileStream(filePath, FileMode.Create))
+                {
+                    foreach (GameDataForDB game in gamesList)
+                    {
+                        jsonData = JsonSerializer.Serialize(game) + _adjacentRecordsSeparator;
+                        allGamesFile.Write(Encoding.Default.GetBytes(jsonData));
+                    }
+                    allGamesFile.Close();
+                }
+                reportGeneratingState = "\n" + Messages.AllGamesSaveMessage + "\n";
+                additionalParams = new object[] { _fileNames[2] };
+            }
+            catch
+            {
+                reportGeneratingState = "\n" + Messages.SaveToFileErrorMessage + "\n";
             }
         }
     }

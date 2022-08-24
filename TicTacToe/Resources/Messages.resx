@@ -154,7 +154,7 @@
     <value>Information about all games between current players is saved to file {0}</value>
   </data>
   <data name="LanguagesNames" xml:space="preserve">
-    <value>Russian English French German Spanish Italian Dutch Portuguese Arabic Chinese Japanese</value>
+    <value>Russian English</value>
   </data>
   <data name="LastGameSaveMessage" xml:space="preserve">
     <value>Information about the last game was successfully saved to the file {0}</value>

@@ -2,65 +2,149 @@
 using TicTacToe.Resources;
 using TicTacToe.Model.ViewModel;
 using TicTacToe.Services;
+using TicTacToe.Utils;
 using System.Globalization;
 
 namespace TicTacToe.Launchers {
+
     /// <summary>
     ///   This class describes all the main actions that take place during the game.
     /// </summary>
     public class TicTacToeGame
     {
-        /// <summary>The players who actually play current game.</summary>
+        
+        /// <summary>
+        /// The game players
+        /// </summary>
         private Player[] _players;
-        /// <summary>The symbol that initially stands in each cell of the field.</summary>
+
+        /// <summary>
+        /// Default field symbol that shows unoccupied cell
+        /// </summary>
         private char _fieldSymbol;
-        /// <summary>This parameter describes current state of the game field (i.e. what character is currently in a particular cell of the field).</summary>
+
+        /// <summary>
+        /// The game field symbols. Describes current game field state
+        /// </summary>
         private char[,] _gameFieldSymbols;
-        /// <summary>Game field size.</summary>
+
+        /// <summary>
+        /// The game field size
+        /// </summary>
         private int _fieldSize;
-        /// <summary>Maximum allowed player name length.</summary>
+
+        /// <summary>
+        /// The maximum player's name length
+        /// </summary>
         private int _maxNameLength;
-        /// <summary>The maximum allowed number of attempts to enter the row and column numbers of the cell in which the user wants to put his character. 
-        /// If after this number of attempts the correct input has not been made, the turn passes to the opponent.</summary>
+
+        /// <summary>
+        /// The maximum retries for one turn count. After this number of tries turn goes to the opponent.
+        /// </summary>
         private int _maxRetriesCount;
-        /// <summary>Symbols with which players fill the playing field (each player has its own symbol).</summary>
+
+        /// <summary>
+        /// The player symbols.
+        /// </summary>
         private string _userSymbols;
-        /// <summary>Number of players taking part in the game.</summary>
+
+        /// <summary>
+        /// The number of players in current game.
+        /// </summary>
         private int _playersCount;
-        /// <summary>The number of the player who is currently take a turn.</summary>
+
+        /// <summary>
+        /// The number of user who is taking the turn at the moment.
+        /// </summary>
         private int _userNumberForTurn = 0;
-        /// <summary>The number of turns, after each of which the field was supplemented with one new symbol. 
-        /// When it becomes equal to the number of rows of the field times the number of columns of the field, and neither player has won, a draw is declared.</summary>
+
+        /// <summary>
+        /// This property describes how many turns ended by placing a new symbol on the game field.
+        /// </summary>
         private int _successfulTurnsCount = 0;
-        /// <summary>The row number of sell that the current player wants to iccuoy.</summary>
+
+        /// <summary>
+        /// The row number of cell player wants to occupy.
+        /// </summary>
         private int _rowNumberForTurn;
-        /// <summary>The column number of sell that current player wants to occupy.</summary>
+
+        /// <summary>
+        /// The column number of cell player wants to occupy.
+        /// </summary>
         private int _columnNumberForTurn;
-        /// <summary>The symbol that separates adjacent horizontals of the game field.</summary>
+
+        /// <summary>
+        /// The symbol that separates two adjacent rows of the game field.
+        /// </summary>
         private char _horizontalSeparator;
-        /// <summary>The symbol that separates adjacent verticals of the game field.</summary>
+
+        /// <summary>
+        /// The symbol that separates two adjacent columns of the game field.
+        /// </summary>
         private char _verticalSeparator;
-        /// <summary>The symbol that separates the row and column numbers of the cell where current player wants to make a turn.</summary>
+
+        /// <summary>
+        /// The symbol that separates row and column number in player's input.
+        /// </summary>
         private char _turnInputSeparator;
-        /// <summary>The symbol that separates player id, name and age when input is performed.</summary>
+
+        /// <summary>
+        /// The symbol that separates player's personal data clusters when input.
+        /// </summary>
         private char _userDataInputSeparator;
-        /// <summary>The minimum allowed player age.</summary>
+
+        /// <summary>
+        /// The minimum allowed player age.
+        /// </summary>
         private int _minAllowedAge;
-        /// <summary>The maximum allowed player age.</summary>
+
+        /// <summary>
+        /// The maximum allowed player age.
+        /// </summary>
         private int _maxAllowedAge;
-        /// <summary>The game start date</summary>
+
+        /// <summary>
+        /// The game start date.
+        /// </summary>
         private DateTime _gameStartDate;
-        /// <summary>The game end date</summary>
+
+        /// <summary>
+        /// The game end date.
+        /// </summary>
         private DateTime _gameEndDate;
-        /// <summary>Abbreviations of supported languages. 
-        /// We need to know them in order to allow the user to enter one of them to select the language in which the game should be played.</summary>
+
+        /// <summary>
+        /// Supported languages abbreviations.
+        /// </summary>
         private string[] _languagesAbbreviations;
-        /// <summary>Here we initialize private properties with corresponding params that are taken from constants by default.</summary>
+
+        /// <summary>The json commands. By default we take them from constants</summary>
+        private string[] _commands;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TicTacToeGame"/> class.
+        /// </summary>
+        /// <param name="playersCount">The players count.</param>
+        /// <param name="fieldSize">Size of the field.</param>
+        /// <param name="maxNameLength">Maximum length of the name.</param>
+        /// <param name="maxRetriesCount">The maximum retries count.</param>
+        /// <param name="playerSymbols">The player symbols.</param>
+        /// <param name="fieldSymbol">The symbol that fills all game field by default.</param>
+        /// <param name="verticalSeparator">The symbol that separates two adjacent columns.</param>
+        /// <param name="horizontalSeparator">The symbol that separates two adjacent rows.</param>
+        /// <param name="turnInputSeparator">The symbol that separates row number and column number while turn.</param>
+        /// <param name="userDataInputSeparator">The player personal data's input separator.</param>
+        /// <param name="minAllowedAge">The minimum allowed player's age.</param>
+        /// <param name="maxAllowedAge">The maximum allowed player's age.</param>
+        /// <param name="languagesAbbreviations">The languages abbreviations.</param>
+        /// <param name="languagesAbbreviationsSeparator">The languages abbreviations separator.</param>
+        /// <param name="jsonCommandsString">The string that contains commands to interact with JSON files.</param>
+        /// /// <param name="jsonCommandsSeparator">Separates two adjacent commands that interact with JSON files.</param>
         public TicTacToeGame(int playersCount = Constants.Constants.PlayersCount,
             int fieldSize = Constants.Constants.GameFieldSize,
             int maxNameLength = Constants.Constants.MaxAllowedNameLength,
             int maxRetriesCount = Constants.Constants.MaxAllowedRetriesCount,
-            string symbols = Constants.Constants.TicTacToeSymbols,
+            string playerSymbols = Constants.Constants.PlayerSymbols,
             char fieldSymbol = Constants.Constants.FieldSymbol,
             char verticalSeparator = Constants.Constants.VerticalFieldSeparator,
             char horizontalSeparator = Constants.Constants.HorizontalFieldSeparator,
@@ -68,14 +152,17 @@ namespace TicTacToe.Launchers {
             char userDataInputSeparator = Constants.Constants.UserDataInputSeparator,
             int minAllowedAge = Constants.Constants.MinAllowedAge,
             int maxAllowedAge = Constants.Constants.MaxAllowedAge,
-            string languagesAbbreviations = Constants.Constants.SupportedLanguagesAbbreviations)
+            string languagesAbbreviations = Constants.Constants.SupportedLanguagesAbbreviations,
+            char languagesAbbreviationsSeparator = Constants.Constants.LanguagesAbbreviationsSeparator,
+            string commandsString = Constants.Constants.Commands,
+            char commandsSeparator = Constants.Constants.CommandsSeparator)
         {
-            _gameStartDate = DateTime.Now;      //Saving game start date as an exact time of now.
+            _gameStartDate = DateTime.Now;
             _playersCount = playersCount;
             _fieldSize = fieldSize;
             _maxNameLength = maxNameLength;
             _maxRetriesCount = maxRetriesCount;
-            _userSymbols = symbols;
+            _userSymbols = playerSymbols;
             _fieldSymbol = fieldSymbol;
             _verticalSeparator = verticalSeparator;
             _horizontalSeparator = horizontalSeparator;
@@ -85,182 +172,292 @@ namespace TicTacToe.Launchers {
             _maxAllowedAge = maxAllowedAge;
             _players = new Player[_playersCount];
             _gameFieldSymbols = new char[_fieldSize, _fieldSize];
-            _languagesAbbreviations = languagesAbbreviations.Split(',');        //As it is actually a string, we need to convert it to array of abbreviations
-            for (int i = 0; i < _fieldSize; i++)        //Filling the game field by default symbol
+            _languagesAbbreviations = languagesAbbreviations.Split(languagesAbbreviationsSeparator);        
+            _commands = commandsString.Split(commandsSeparator); 
+            for (int i = 0; i < _fieldSize; i++)
                 for (int j = 0; j < _fieldSize; j++)
                     _gameFieldSymbols[i, j] = _fieldSymbol;
-            SetUICulture();         //Selecting game language
-            SetUsersPersonalData();     //Setting player data such as ID, name and age
-            PlayersDBService.UpdatePlayersDB(_playersCount,_players);       //Using PlayersDBService we update info about players in DB
         }
-        /// <summary>This method is called when we want to play a new game and it contains all necessary method calls inside to complete one game.</summary>
+
+        /// <summary>Plays a new game, contains all necessary methods calls inside to complete one game.</summary>
         public void Play()
         {
-            LaunchGame();       //Play current game until someone wins, otherwise draw is declared
-            JsonService.GenerateJsonReports(GamesDBService._gamesDB, _players);         //Optionally, players can generate certain types of game reports in JSON format
-            ConfirmGameRepeat();        //By calling this method we are asking the players if they want to restart the game or exit the console.
+            SetGameLocalSettings();
+            PlayersDBService.UpdatePlayersDB(_playersCount, _players);
+            LaunchGame(out int? winnerId);
+            GamesDBService.UpdateGamesDB(_gameStartDate, _gameEndDate, _userSymbols, _players, winnerId);
+            WorkWithUserCommands();
+            ConfirmGameRepeat();        
         }
-        /// <summary>This method sets game UI language.</summary>
-        private void SetUICulture()
+
+        /// <summary>
+        /// Sets game local settings such as player personal data and game language.
+        /// </summary>
+        private void SetGameLocalSettings()
         {
-            string languagesNamesString = Messages.LanguagesNames;      //Full languages names.
-                                                                        //We store them in resx languages files to display them in current UI culture language or in English, if current UI culture isn't supported.
-            string[] languagesNames = languagesNamesString.Split(' ');  //Languages names are stored as a string, so we need to separate each language name
+            string userLanguage = SelectGameLanguage();
+            SetUILanguage(userLanguage);
+            SetPlayersPersonalData();
+        }
+
+        /// <summary>
+        /// This method plays current game until someone wins, otherwise draw is declared.
+        /// </summary>
+        /// <param name="winnerId">Id of a player who won the game or null in case of draw.</param>
+        private void LaunchGame(out int? winnerId)
+        {
+            while (_successfulTurnsCount < _fieldSize * _fieldSize)     //I.e. while there are left some cells not occupied by a player
+            {
+                ConsoleHandler.WriteLine(Messages.CurrentTurnPlayerDeclarationMessage, _players[_userNumberForTurn].Name);
+                DrawGameField();
+                PerformOneUserTurn();
+                if (IsSomeoneWon())
+                {
+                    _gameEndDate = DateTime.Now;
+                    winnerId = _players[_userNumberForTurn].Id;
+                    DrawGameEndInfo(Messages.WinnerDeclarationMessage, _players[_userNumberForTurn].Name);
+                    return;
+                }
+                //Current player number's equality to playersCount - 1 means that player with number 0 takes the next turn
+                _userNumberForTurn = _userNumberForTurn == _playersCount - 1 ? 0 : _userNumberForTurn + 1;
+            }
+            _gameEndDate = DateTime.Now;
+            winnerId = null;
+            DrawGameEndInfo(Messages.DrawMessage, null);
+        }
+
+        /// <summary>
+        /// Supports stage of the game when user enters the commands.
+        /// </summary>
+        private void WorkWithUserCommands()
+        {
+            int generationCommandsCount = _commands.Length;
+            int commandIndex;
+            do
+            {
+                commandIndex = GetUserCommandIndex();
+                ProcessUserCommand(commandIndex, out string reportState, out object[]? additionalParams);
+                ConsoleHandler.WriteLine(reportState, additionalParams);
+            } while (commandIndex != generationCommandsCount - 1);
+        }
+
+        /// <summary>Asks players do they want to play the game again or exit.</summary>
+        private void ConfirmGameRepeat()
+        {
+            ConsoleHandler.WriteLine(Messages.RepeatConfirmMessage);
+            ConsoleKey confirmKey = ConsoleHandler.ReadKey().Key;
+            if (confirmKey != ConsoleKey.Enter)
+                Environment.Exit(0);
+            else
+                return;
+        }
+
+        /// <summary>This method asks the user to select game language until he enters language abbreviation that corresponds to one of given.</summary>
+        private string SelectGameLanguage()
+        {
+            string languagesNamesString = Messages.LanguagesNames;                                                                  
+            string[] languagesNames = languagesNamesString.Split(Constants.Constants.LanguagesNamesSeparator);  //Languages names are stored as a string, so we need to separate each language name
             int languagesCount = languagesNames.Length;
             while (true)
             {
-                Console.WriteLine(Messages.SelectLanguageMessage);      //Displaying language select options for players
+                ConsoleHandler.WriteLine(Messages.SelectLanguageMessage);      
                 for (int i = 0; i < languagesCount; i++)
-                    Console.WriteLine($"{_languagesAbbreviations[i]} - {languagesNames[i]};");
-                string? userLanguage = Console.ReadLine();
-                if (!string.IsNullOrEmpty(userLanguage))        //If user input is null or empty string we show him following message and the whole process repeats
+                    ConsoleHandler.WriteLine($"{_languagesAbbreviations[i]} - {languagesNames[i]};");
+                string? userLanguage = ConsoleHandler.ReadLine();
+                if (!string.IsNullOrEmpty(userLanguage))        
                 {
                     userLanguage = userLanguage.Trim();
-                    if (Array.IndexOf(_languagesAbbreviations, userLanguage.ToLower()) != -1)       //Otherwise we try to convert user input to one of languages abbreviations
-                    {
-                        CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo(userLanguage);        //If convertion was successful we set UI culture and exit the method
-                        return;
+                    if (Array.IndexOf(_languagesAbbreviations, userLanguage.ToLower()) != -1)       
+                    {      
+                        return userLanguage;
                     }
                 }
-                Console.WriteLine("\n" + Messages.SelectLanguageRetryMessage + "\n");       //This message is shown when user input is null or empty or does not match any language abbreviation
+                ConsoleHandler.WriteLine("\n" + Messages.SelectLanguageRetryMessage + "\n");      
             }
         }
-        /// <summary>This method plays current game until someone wins, otherwise draw is declared.</summary>
-        private void LaunchGame()
+
+        /// <summary>
+        /// Sets the UI
+        /// language by the given language abbreviation.
+        /// </summary>
+        /// <param name="userLanguage">The given language abbreviation</param>
+        private void SetUILanguage(string userLanguage)
         {
-            /// <summary>The internal method that describes what will happen after someone won or the draw was declared </summary>
-            /// <param name = "message">The string that displays info about winner or draw.</param>
-            /// <param name = "winnerName">The name of game winner or null if the current game was drawn.</param>
-            /// <param name = "winnerId">The ID of game winner or null if the current game was drawn.</param>
-            void FinishCurrentGame(string message, string? winnerName, int? winnerId)
-            {
-                _gameEndDate = DateTime.Now;        //Save game end date as a time of now
-                DrawGameField();        //Draw game field to show visually who won the game
-                Console.WriteLine(message, winnerName);     //Write a message about who won the game
-                GamesDBService.UpdateGamesDB(_gameStartDate, _gameEndDate, _userSymbols, _players, winnerId);       //Add info about current game to database
-            }
-            while (_successfulTurnsCount < _fieldSize * _fieldSize)     //It means while there are left some cell not occupied by a player
-            {
-                WriteUserNumberForTurn();       //Write info about what player currently takes a turn
-                DrawGameField();        //Draw current game field state    
-                PerformOneUserTurn();       //One of players makes a turn       
-                if (IsSomeoneWon())     //If someone won after turn we finish current game and display ID and name of a player who took the last turn
-                {
-                    FinishCurrentGame(Messages.WinnerDeclarationMessage, _players[_userNumberForTurn].Name, _players[_userNumberForTurn].Id);
-                    return;
-                }
-                _userNumberForTurn = _userNumberForTurn == _playersCount - 1 ? 0 : _userNumberForTurn + 1;      //If the game continues, we update number of a player who takes the next turn
-            }
-            FinishCurrentGame(Messages.DrawMessage, null, null);    //If all field is covered with player symbols and none of players won, the draw is declared
+            CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo(userLanguage);
         }
-        /// <summary>This method sets personal data of each player.</summary>
-        private void SetUsersPersonalData()
+
+        /// <summary>
+        /// Asks player to enter his personal data until his input matches the required pattern. 
+        /// </summary>
+        /// <param name="playerNumber">Current player number</param>
+        /// <param name="takenIds">The list of ID's that have already been taken</param>
+        /// <param name="playerId">Result player's ID</param>
+        /// <param name="playerName">Result player's name</param>
+        /// <param name="playerAge">Result player's age</param>
+        private void InputPlayerPersonalData(int playerNumber,
+            List<int> takenIds, out int playerId, out string playerName, out int playerAge)
         {
-            bool correctUserInput;      //We need it to check whether the player entered requested info correctly
-            string? possiblePlayerPersonalData;         //the string that stores current user input
-            //We need playerId, playerName and playerAge params to save info about player and later create a new player object by these params 
-            //We set them some default values, because if user enters required data in a correct form, it immediately saved to these variables.
-            //So that's why we need to use ref to these variables while checking if user input is proper. And it requires some default values to these variables.
-            string playerName = "";     
-            int playerId = 0;
-            int playerAge = 0;
-            List<int> bookedIds = new();        //Here we store ID's of players that were already taken
+            bool isInputCorrect;
+            do
+            {
+                ConsoleHandler.WriteLine(Messages.AskForDataInputMessage, playerNumber);
+                string? possiblePlayerPersonalData = ConsoleHandler.ReadLine();
+                isInputCorrect = UserDataInputCheck.IsUserDataInputProper(possiblePlayerPersonalData,
+                    _userDataInputSeparator,
+                    _maxNameLength,
+                    _minAllowedAge,
+                    _maxAllowedAge,
+                    out playerId,
+                    out playerName,
+                    out playerAge,
+                    takenIds,
+                    out string? description,
+                    out object[]? additionalParams);
+                if (!isInputCorrect)
+                    ConsoleHandler.WriteLine(description, additionalParams);
+            } while (!isInputCorrect);
+        }
+
+        /// <summary>Sets personal data of each player depending on his input.</summary>
+        private void SetPlayersPersonalData()
+        {
+            int playerId;
+            int playerAge;
+            string playerName;
+            List<int> takenIds = new();
             for (int i = 0; i < _playersCount; i++)
             {
-                do
-                {
-                    Console.WriteLine(Messages.AskForDataInputMessage, i + 1);      //Here we ask user to enter his info
-                    possiblePlayerPersonalData = Console.ReadLine();
-                    correctUserInput = UserDataInputCheck.isUserDataInputProper(possiblePlayerPersonalData,     //Here we check if user input is proper
-                        _userDataInputSeparator,
-                        _maxNameLength,
-                        _minAllowedAge,
-                        _maxAllowedAge,
-                        ref playerId,
-                        ref playerName,
-                        ref playerAge,
-                        bookedIds);
-                } while (!correctUserInput);
-                _players[i] = new(_userSymbols[i], playerName, playerId, playerAge);        //If user input is proper we add new player
-                bookedIds.Add(playerId);        //And mark his ID as taken
+                InputPlayerPersonalData(i + 1, takenIds, out playerId, out playerName, out playerAge);
+                _players[i] = new(_userSymbols[i], playerName, playerId, playerAge);
+                takenIds.Add(playerId);
             }
         }
-        /// <summary>This method writes in the console message about which player currently takes the turn.</summary>
-        private void WriteUserNumberForTurn()
-        {
-            Console.WriteLine(Messages.CurrentTurnPlayerDeclarationMessage, _players[_userNumberForTurn].Name);
-        }
-        /// <summary>This method draws current state of the game field.</summary>
+
+        /// <summary>Draws current state of the game field.</summary>
         private void DrawGameField()
         {
             for (int i = 0; i < _fieldSize; i++)
             {
                 for (int j = 0; j < _fieldSize - 1; j++)
-                    Console.Write($"{_gameFieldSymbols[i, j]}{_verticalSeparator}");
-                Console.WriteLine(_gameFieldSymbols[i, _fieldSize - 1]);
+                    ConsoleHandler.Write($"{_gameFieldSymbols[i, j]}{_verticalSeparator}");
+                ConsoleHandler.WriteLine(_gameFieldSymbols[i, _fieldSize - 1]);
                 if (i != _fieldSize - 1)
                 {
                     for (int j = 0; j < _fieldSize - 1; j++)
-                        Console.Write($"{_horizontalSeparator}{_horizontalSeparator}");
-                    Console.WriteLine($"{_horizontalSeparator}{_horizontalSeparator}");
+                        ConsoleHandler.Write($"{_horizontalSeparator}{_horizontalSeparator}");
+                    ConsoleHandler.WriteLine($"{_horizontalSeparator}{_horizontalSeparator}");
                 }
             }
         }
-        /// <summary>This method contains all actions of one player turn.</summary>
+
+        /// <summary>Processes all actions of one player turn.</summary>
         private void PerformOneUserTurn()
         {
-            string? userInput;      //Stores user input
-            bool wrongFieldNumberInput;         //Determines if user input is proper
-            int attemptsLeftCount = _maxRetriesCount;       //sets attempts left count to a default value of maximum retries number
+            string? userInput;
+            bool isCellNumberWrong;
+            int attemptsLeftCount = _maxRetriesCount;
             do
             {
-                //Here we ask user to enter info about his turn
-                Console.WriteLine(Messages.AskForPerformCurrentTurnMessage, _players[_userNumberForTurn].Name);         
-                userInput = Console.ReadLine();
-                //And if user input is just null or empty string we immediately set improper input flag to 
+                ConsoleHandler.WriteLine(Messages.AskForPerformCurrentTurnMessage, _players[_userNumberForTurn].Name);
+                userInput = ConsoleHandler.ReadLine();
                 if (string.IsNullOrEmpty(userInput))
-                    wrongFieldNumberInput = true;
+                    isCellNumberWrong = true;
                 else
-                    //Otherwise we check if user input is proper. And if it is then we just fill required cell by player symbol
-                    wrongFieldNumberInput = !UserTurnCheck.IsUserTurnInputProper(userInput,
+                    isCellNumberWrong = !UserTurnCheck.IsUserTurnInputProper(userInput,
                         _fieldSize,
                         _turnInputSeparator,
                         ref _rowNumberForTurn,
                         ref _columnNumberForTurn,
                         _gameFieldSymbols,
                         _fieldSymbol);
-                if (wrongFieldNumberInput)      //If the input wasn't proper we throw following message to user and decrease the number of attempts left
+                if (isCellNumberWrong)
                 {
                     attemptsLeftCount--;
-                    Console.WriteLine(Messages.WrongCellMessage, attemptsLeftCount);
+                    ConsoleHandler.WriteLine(Messages.WrongCellMessage, attemptsLeftCount);
                 }
-            } while (wrongFieldNumberInput && attemptsLeftCount != 0);      //Exit do...while when there are no attempts left or user input is proper
-            if (attemptsLeftCount != 0)     //i.e. if user input is proper
+            } while (isCellNumberWrong && attemptsLeftCount != 0);
+            if (attemptsLeftCount != 0)
             {
-                //Fill one more game field cell and mark this turn as successful
                 _gameFieldSymbols[_rowNumberForTurn - 1, _columnNumberForTurn - 1] = _players[_userNumberForTurn].Symbol;
                 _successfulTurnsCount++;
             }
         }
-        /// <summary>This method determines if one of player won after current turn.</summary>
+
+        /// <summary>
+        /// Asks user to input one of suggested commands.
+        /// </summary>
+        /// <returns>The index of entered command among suggested commands</returns>
+        private int GetUserCommandIndex()
+        {
+            ConsoleHandler.WriteLine(Messages.AskForEnterCommandMessage +
+            $"\n{_commands[0]}:" + Messages.FirstCommandMessage +
+            $"\n{_commands[1]}:" + Messages.SecondCommandMessage +
+            $"\n{_commands[2]}:" + Messages.ThirdCommandMessage +
+            $"\n{_commands[3]}:" + Messages.FourthCommandMessage);
+            string? userGenerationCommand = ConsoleHandler.ReadLine();
+            int userGenerationCommandIndex = Array.IndexOf(_commands, userGenerationCommand);
+            return userGenerationCommandIndex;
+        }
+
+        /// <summary>
+        /// Performs actions that correspond the command entered by the user.
+        /// </summary>
+        /// <param name="commandIndex">Index of command among all commands for user</param>
+        /// <param name="reportState">String that represents state of report (if it was compiled successfully or some errors occured)</param>
+        /// <param name="additionalOutputParams">Supplementing params for report state</param>
+        private void ProcessUserCommand(int commandIndex, out string reportState, out object[]? additionalOutputParams)
+        {
+            reportState = null;
+            additionalOutputParams = null;
+            switch (commandIndex)
+            {
+                case 0:
+                    JsonService.GenerateCurrentGameReport(GamesDBService._gamesDB, out reportState, out additionalOutputParams);
+                    break;
+                case 1:
+                    JsonService.GenerateCurrentPlayerGamesReport(GamesDBService._gamesDB, _players, out reportState, out additionalOutputParams);
+                    break;
+                case 2:
+                    JsonService.GenerateAllGamesReport(GamesDBService._gamesDB, out reportState, out additionalOutputParams);
+                    break;
+                case -1:
+                    reportState = Messages.WrongCommandMessage;
+                    additionalOutputParams = null;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Draws the final state of the game field and writes message about who won the game.
+        /// </summary>
+        /// <param name="message">Text of the message about winner</param>
+        /// <param name="winnerName">Name of the winner of the game or null if the game was drawn</param>
+        private void DrawGameEndInfo(string message, string? winnerName)
+        {
+            DrawGameField();
+            ConsoleHandler.WriteLine(message, winnerName);
+        }
+
+        /// <summary>Determines if one of player won after current turn.</summary>
         /// <returns>Boolean value that actually is <c>true</c> when someone won after current turn and <c>false</c> otherwise</returns>
         private bool IsSomeoneWon()
         {
-            for (int i = 0; i < _fieldSize; i++)        //Game field horizontals lookup
+            for (int i = 0; i < _fieldSize; i++)       
             {
-                char firstCharInRow = _gameFieldSymbols[i, 0];      //Remember first symbol in row 
-                if (firstCharInRow == _fieldSymbol)         //If this symbol equals to default symbol then this row can't bring the win for someone
-                    continue;
-                for (int j = 1; j < _fieldSize; j++)        //Otherwise we have a look at other cells in a row 
+                char firstCharInRow = _gameFieldSymbols[i, 0];     
+                if (firstCharInRow == _fieldSymbol)         
+                    continue;       //If first symbol in row equals to default field symbol this row can't bring the win for someone
+                for (int j = 1; j < _fieldSize; j++)        
                 {
-                    //When a cell is occupied by symbol that doesn't match first symbol in a row then this row isn't lucky
                     if (_gameFieldSymbols[i, j] != firstCharInRow)          
-                        break;
-                    if (j == _fieldSize - 1)        //If we looked up all cells in a row and didn't break the lookup, it means that someone won
-                        return true;
+                        break;      //When a cell is occupied by symbol that doesn't match first symbol in a row then this row isn't lucky too
+                    if (j == _fieldSize - 1)        
+                        return true;        //If we looked up all cells in a row and didn't break the lookup, someone won.
                 }
             }
-            //The same lookup for verticals
+
             for (int j = 0; j < _fieldSize; j++)
             {
                 char firstCharInColumn = _gameFieldSymbols[0, j];
@@ -274,16 +471,13 @@ namespace TicTacToe.Launchers {
                         return true;
                 }
             }
-            //Lookup for diagonals has the same principle.
-            //If the first symbol in diagonal doesn't belong to any player then no one won.
-            //Otherwise if we find some symbol that doesn't match first diagonal symbol, the diagonal turns out to be unlucky
-            //Otherwise we completed diagonal lookup, and all symbol of diagonals are belong to someone and are equal. E.g. someone won
+            
             char firstCharInMainDiagonal = _gameFieldSymbols[0, 0];
             if (firstCharInMainDiagonal != _fieldSymbol)
                 for (int i = 1; i < _fieldSize; i++)
                 {
                     if (_gameFieldSymbols[i, i] != firstCharInMainDiagonal)
-                        break;
+                        break;      //If some symbol in a diagonal doesn't equals the first symbol of this diagonal, diagonal isn't lucky for player
                     if (i == _fieldSize - 1)
                         return true;
                 }
@@ -297,16 +491,6 @@ namespace TicTacToe.Launchers {
                         return true;
                 }
             return false;
-        }
-        /// <summary>In this method we ask players do they want to play the game again or exit.</summary>
-        private void ConfirmGameRepeat()
-        {
-            Console.WriteLine(Messages.RepeatConfirmMessage);
-            ConsoleKey confirmKey = Console.ReadKey().Key;     //Here we read key that user have pressed
-            if (confirmKey != ConsoleKey.Enter)         //If this key isn't Enter we exit the app. Otherwise new game starts
-                Environment.Exit(0);
-            else
-                return;
         }
     };
 }
